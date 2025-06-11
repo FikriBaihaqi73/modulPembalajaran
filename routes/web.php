@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SantriController;
+use App\Http\Controllers\MentorController;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -15,5 +18,13 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Home Route (after successful login)
 Route::get('/home', function () {
-    return 'Anda berhasil login!'; // Or return view('home'); if you create a home view
+    return view('welcome');
 })->middleware('auth');
+
+// Admin Routes
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+
+    Route::get('/santri', [SantriController::class, 'index'])->name('santri');
+    Route::get('/mentor', [MentorController::class, 'index'])->name('mentor');
+});

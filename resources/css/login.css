@@ -57,7 +57,7 @@
   outline: none;
 }
 
-button {
+.login-button {
   padding: 15px;
   border: none;
   border-radius: 8px;
@@ -69,7 +69,7 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+.login-button:hover {
   background-color: #0d47a1;
 }
 
@@ -112,7 +112,7 @@ button:hover {
     font-size: 14px;
   }
 
-  button {
+  .login-button {
     padding: 12px;
     font-size: 14px;
   }

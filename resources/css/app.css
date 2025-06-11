@@ -3,3 +3,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom styles for admin layout buttons to remove unwanted borders and backgrounds */
+#sidebarToggle,
+#profileDropdownToggle {
+    border: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
