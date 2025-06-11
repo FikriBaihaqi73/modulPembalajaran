@@ -8,22 +8,22 @@
 </head>
 <body>
     <x-navbar/>
-    @csrf
 
     <div class="flex items-center justify-center min-h-screen">
         <div class="login-container">
-            <h3 class="heading">Login ke Akun Anda</h3>
-            <p class="paragraph">Silakan masukkan detail Anda untuk masuk.</p>
-            <form action="#" method="POST" class="login-form">
+            <h3 class="heading">Login</h3>
+            <form action="/login" method="POST" class="login-form">
+                @csrf
                 <div class="input-group">
                     <label class="hidden" for="username">Username</label>
-                    <input type="text" id="username" placeholder="Username">
+                    <input type="text" id="username" placeholder="Username" name="username">
                 </div>
                 <div class="input-group">
                     <label class="hidden" for="password">Password</label>
-                    <input type="password" id="password" placeholder="Password">
+                    <input type="password" id="password" placeholder="Password" name="password">
                 </div>
                 <button type="submit">Login</button>
+                </div>
             </form>
         </div>
     </div>
