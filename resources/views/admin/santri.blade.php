@@ -9,19 +9,19 @@
         <table class="min-w-full bg-white rounded shadow">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 border-b">#</th>
-                    <th class="py-2 px-4 border-b">Username</th>
-                    <th class="py-2 px-4 border-b">Nama</th>
-                    <th class="py-2 px-4 border-b">Aksi</th>
+                    <th class="py-2 px-4 border-b text-center">nomor</th>
+                    <th class="py-2 px-4 border-b text-center">Username</th>
+                    <th class="py-2 px-4 border-b text-center">Nama</th>
+                    <th class="py-2 px-4 border-b text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($santri as $s)
                 <tr>
-                    <td class="py-2 px-4 border-b">{{ $loop->iteration }}</td>
-                    <td class="py-2 px-4 border-b">{{ $s->username }}</td>
-                    <td class="py-2 px-4 border-b">{{ $s->name }}</td>
-                    <td class="py-2 px-4 border-b">
+                    <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
+                    <td class="py-2 px-4 border-b text-center">{{ $s->username }}</td>
+                    <td class="py-2 px-4 border-b text-center">{{ $s->name }}</td>
+                    <td class="py-2 px-4 border-b text-center">
                         <a href="{{ route('admin.santri.edit', $s->id) }}" class="text-blue-600 mr-2">Edit</a>
                         <form action="{{ route('admin.santri.destroy', $s->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin hapus santri?')">
                             @csrf
