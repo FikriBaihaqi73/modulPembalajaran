@@ -31,7 +31,7 @@ class MentorController extends Controller
         $data['password'] = bcrypt($data['password']);
         $data['role_id'] = $mentorRole->id;
         User::create($data);
-        return redirect()->route('mentor.index')->with('success', 'Mentor berhasil ditambahkan.');
+        return redirect()->route('admin.mentor.index')->with('success', 'Mentor berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -54,13 +54,13 @@ class MentorController extends Controller
             unset($data['password']);
         }
         $mentor->update($data);
-        return redirect()->route('mentor.index')->with('success', 'Mentor berhasil diupdate.');
+        return redirect()->route('admin.mentor.index')->with('success', 'Mentor berhasil diupdate.');
     }
 
     public function destroy($id)
     {
         $mentor = User::where('role_id', Role::where('name', 'Mentor')->first()->id)->findOrFail($id);
         $mentor->delete();
-        return redirect()->route('mentor.index')->with('success', 'Mentor berhasil dihapus.');
+        return redirect()->route('admin.mentor.index')->with('success', 'Mentor berhasil dihapus.');
     }
 }

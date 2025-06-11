@@ -31,7 +31,7 @@ class SantriController extends Controller
         $data['password'] = bcrypt($data['password']);
         $data['role_id'] = $santriRole->id;
         User::create($data);
-        return redirect()->route('santri.index')->with('success', 'Santri berhasil ditambahkan.');
+        return redirect()->route('admin.santri.index')->with('success', 'Santri berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -54,13 +54,13 @@ class SantriController extends Controller
             unset($data['password']);
         }
         $santri->update($data);
-        return redirect()->route('santri.index')->with('success', 'Santri berhasil diupdate.');
+        return redirect()->route('admin.santri.index')->with('success', 'Santri berhasil diupdate.');
     }
 
     public function destroy($id)
     {
         $santri = User::where('role_id', Role::where('name', 'Santri')->first()->id)->findOrFail($id);
         $santri->delete();
-        return redirect()->route('santri.index')->with('success', 'Santri berhasil dihapus.');
+        return redirect()->route('admin.santri.index')->with('success', 'Santri berhasil dihapus.');
     }
 }
