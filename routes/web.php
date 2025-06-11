@@ -25,6 +25,6 @@ Route::get('/home', function () {
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
-    Route::get('/santri', [SantriController::class, 'index'])->name('santri');
-    Route::get('/mentor', [MentorController::class, 'index'])->name('mentor');
+    Route::resource('/santri', SantriController::class)->names('santri');
+    Route::resource('/mentor', MentorController::class)->names('mentor');
 });
