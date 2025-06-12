@@ -1,0 +1,173 @@
+/* Basic editor styles */
+.tiptap-container {
+  border: 1px solid #ddd; /* Softer border */
+  border-radius: 8px; /* More rounded corners */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+}
+
+.tiptap-menubar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 8px; /* Consistent padding */
+  border-bottom: 1px solid #eee;
+  background: #f8f9fa; /* Light background for toolbar */
+  position: sticky;
+  top: 0;
+  z-index: 10; /* Ensure it stays above content */
+  gap: 4px; /* Space between buttons */
+}
+
+.tiptap-menubar button {
+  background: none; /* No default background */
+  border: none; /* No individual button borders */
+  padding: 6px 10px; /* Adjusted padding */
+  margin: 0; /* Remove old margins */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: #495057; /* Darker text for buttons */
+  transition: background-color 0.2s ease;
+}
+
+.tiptap-menubar button:hover {
+  background-color: #e9ecef; /* Light hover background */
+}
+
+.tiptap-menubar button.is-active {
+  background: #007bff; /* Active background */
+  color: white;
+}
+
+/* Editor content styles */
+.tiptap-container .ProseMirror {
+  min-height: 250px; /* Increased min-height */
+  outline: none;
+  padding: 16px; /* Padding for content area */
+  flex-grow: 1; /* Allow content area to expand */
+  background-color: #fff; /* White background for content */
+}
+
+.tiptap-container .ProseMirror:focus {
+  outline: none;
+}
+
+/* Placeholder styling */
+.tiptap-container .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
+  font-style: italic;
+}
+
+/* Link styles */
+.tiptap-container .ProseMirror a {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+/* Image styles */
+.tiptap-container .ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 8px 0;
+  border-radius: 4px; /* Soften image corners */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow for images */
+}
+
+/* Code block styles */
+.tiptap-container .ProseMirror pre {
+  background: #212529; /* Darker background */
+  color: #f8f9fa;
+  font-family: 'Fira Code', 'Fira Mono', monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto; /* Allow horizontal scrolling for long code */
+}
+
+.tiptap-container .ProseMirror pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.8rem;
+}
+
+/* Highlight styles */
+.tiptap-container .ProseMirror mark {
+  background-color: #ffe066; /* Brighter highlight */
+  padding: 0.1em;
+  border-radius: 3px;
+}
+
+/* Blockquote styles */
+.tiptap-container .ProseMirror blockquote {
+  border-left: 4px solid #6c757d; /* Darker border */
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #6c757d;
+  background-color: #f1f3f5; /* Light background for blockquote */
+  padding: 0.5rem 1rem; /* Adjust padding */
+  border-radius: 4px;
+}
+
+/* List styles */
+.tiptap-container .ProseMirror ul,
+.tiptap-container .ProseMirror ol {
+  padding: 0 1.5rem; /* More padding for lists */
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Heading styles */
+.tiptap-container .ProseMirror h1,
+.tiptap-container .ProseMirror h2,
+.tiptap-container .ProseMirror h3,
+.tiptap-container .ProseMirror h4,
+.tiptap-container .ProseMirror h5,
+.tiptap-container .ProseMirror h6 {
+  margin-top: 1em; /* Consistent top margin */
+  margin-bottom: 0.5em; /* Consistent bottom margin */
+}
+
+.tiptap-container .ProseMirror h1 {
+  font-size: 2.2em;
+}
+
+.tiptap-container .ProseMirror h2 {
+  font-size: 1.8em;
+}
+
+.tiptap-container .ProseMirror h3 {
+  font-size: 1.4em;
+}
+
+.tiptap-container .ProseMirror h4 {
+  font-size: 1.2em;
+}
+
+.tiptap-container .ProseMirror h5 {
+  font-size: 1em;
+}
+
+.tiptap-container .ProseMirror h6 {
+  font-size: 0.9em;
+  color: #6c757d; /* Slightly muted for smaller headings */
+}
+
+/* Text alignment */
+.tiptap-container .ProseMirror p.is-left { text-align: left; }
+.tiptap-container .ProseMirror p.is-center { text-align: center; }
+.tiptap-container .ProseMirror p.is-right { text-align: right; }
+.tiptap-container .ProseMirror p.is-justify { text-align: justify; }
+
+/* Underline */
+.tiptap-container .ProseMirror u { text-decoration: underline; }
+
+/* Strike */
+.tiptap-container .ProseMirror s { text-decoration: line-through; }

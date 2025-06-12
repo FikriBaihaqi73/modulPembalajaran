@@ -1,5 +1,3 @@
-// resources/js/admin.js
-
 document.addEventListener('DOMContentLoaded', function () {
     // Sidebar functionality
     const sidebar = document.getElementById('sidebar');

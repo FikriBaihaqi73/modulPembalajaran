@@ -58,6 +58,8 @@ class LoginController extends Controller
             // Check user role and redirect accordingly
             if (Auth::user()->role->name === 'Admin') {
                 return redirect()->intended('/admin/dashboard');
+            } elseif (Auth::user()->role->name === 'Mentor') {
+                return redirect()->intended('/mentor/dashboard');
             } else {
                 return redirect()->intended($this->redirectTo);
             }

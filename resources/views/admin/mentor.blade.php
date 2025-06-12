@@ -12,6 +12,7 @@
                     <th class="py-2 px-4 border-b text-center">nomor</th>
                     <th class="py-2 px-4 border-b text-center">Username</th>
                     <th class="py-2 px-4 border-b text-center">Nama</th>
+                    <th class="py-2 px-4 border-b text-center">Jurusan</th>
                     <th class="py-2 px-4 border-b text-center">Aksi</th>
                 </tr>
             </thead>
@@ -21,6 +22,7 @@
                     <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $m->username }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $m->name }}</td>
+                    <td class="py-2 px-4 border-b text-center">{{ $m->major->name ?? 'N/A' }}</td>
                     <td class="py-2 px-4 border-b text-center">
                         <a href="{{ route('admin.mentor.edit', $m->id) }}" class="text-blue-600 mr-2">Edit</a>
                         <form action="{{ route('admin.mentor.destroy', $m->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin hapus mentor?')">

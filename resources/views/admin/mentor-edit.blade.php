@@ -14,6 +14,15 @@
         <input type="text" name="name" class="w-full border rounded px-3 py-2" value="{{ $mentor->name }}" required>
     </div>
     <div class="mb-4">
+        <label class="block mb-1">Jurusan</label>
+        <select name="major_id" class="w-full border rounded px-3 py-2" required>
+            <option value="">Pilih Jurusan</option>
+            @foreach($majors as $major)
+                <option value="{{ $major->id }}" {{ $mentor->major_id == $major->id ? 'selected' : '' }}>{{ $major->name }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-4">
         <label class="block mb-1">Password (isi jika ingin ganti)</label>
         <input type="password" name="password" class="w-full border rounded px-3 py-2">
     </div>

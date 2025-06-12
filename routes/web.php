@@ -6,6 +6,10 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\SantriController;
 use App\Http\Controllers\Admin\MentorController;
 use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
+use App\Http\Controllers\Mentor\ModuleCategoryController as MentorModuleCategoryController;
+use App\Http\Controllers\Mentor\ModuleController as MentorModuleController;
+use App\Http\Controllers\Mentor\SantriController as MentorSantriController;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -31,4 +35,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::resource('/santri', SantriController::class)->names('santri');
     Route::resource('/mentor', MentorController::class)->names('mentor');
+});
+
+// Mentor Routes
+Route::middleware(['auth'])->prefix('mentor')->name('mentor.')->group(function () {
+    Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
+    Route::resource('/module-categories', MentorModuleCategoryController::class)->names('module-categories');
+    Route::resource('/modules', MentorModuleController::class)->names('modules');
+    Route::resource('/santri', MentorSantriController::class)->names('santri');
 });

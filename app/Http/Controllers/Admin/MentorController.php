@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Major;
 use App\Http\Controllers\Controller;
 
 class MentorController extends Controller
@@ -12,13 +13,14 @@ class MentorController extends Controller
     public function index()
     {
         $mentorRole = Role::where('name', 'Mentor')->first();
-        $mentor = $mentorRole ? $mentorRole->users : collect();
+        $mentor = $mentorRole ? User::where('role_id', $mentorRole->id)->with('major')->get() : collect();
         return view('admin.mentor', compact('mentor'));
     }
 
     public function create()
     {
-        return view('admin.mentor-create');
+        $majors = Major::all();
+        return view('admin.mentor-create', compact('majors'));
     }
 
     public function store(Request $request)
@@ -28,6 +30,7 @@ class MentorController extends Controller
             'username' => 'required|unique:users',
             'name' => 'required',
             'password' => 'required|min:6',
+            'major_id' => 'required|exists:majors,id',
         ]);
         $data['password'] = bcrypt($data['password']);
         $data['role_id'] = $mentorRole->id;
@@ -37,8 +40,9 @@ class MentorController extends Controller
 
     public function edit($id)
     {
-        $mentor = User::where('role_id', Role::where('name', 'Mentor')->first()->id)->findOrFail($id);
-        return view('admin.mentor-edit', compact('mentor'));
+        $mentor = User::where('role_id', Role::where('name', 'Mentor')->first()->id)->with('major')->findOrFail($id);
+        $majors = Major::all();
+        return view('admin.mentor-edit', compact('mentor', 'majors'));
     }
 
     public function update(Request $request, $id)
@@ -48,6 +52,7 @@ class MentorController extends Controller
             'username' => 'required|unique:users,username,'.$mentor->id,
             'name' => 'required',
             'password' => 'nullable|min:6',
+            'major_id' => 'required|exists:majors,id',
         ]);
         if ($data['password']) {
             $data['password'] = bcrypt($data['password']);
