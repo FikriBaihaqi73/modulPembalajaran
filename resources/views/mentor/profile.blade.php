@@ -1,12 +1,14 @@
-@extends('admin.layout')
+@extends('mentor.layout')
+
+@section('title', 'Mentor Profile')
 
 @section('content')
-    <h2 class="text-3xl font-semibold text-gray-800">Admin Profile</h2>
+    <h2 class="text-3xl font-semibold text-gray-800">Mentor Profile</h2>
 
     <div class="mt-4 bg-white p-6 rounded shadow mb-6">
         <h3 class="text-2xl font-semibold text-gray-800 mb-4">Profile Information</h3>
 
-        <form action="{{ route('admin.profile.updateDetails') }}" method="POST">
+        <form action="{{ route('mentor.profile.updateDetails') }}" method="POST">
             @csrf
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
@@ -35,7 +37,7 @@
     <div class="mt-4 bg-white p-6 rounded shadow">
         <h3 class="text-2xl font-semibold text-gray-800 mb-4">Change Password</h3>
 
-        <form action="{{ route('admin.profile.updatePassword') }}" method="POST">
+        <form action="{{ route('mentor.profile.updatePassword') }}" method="POST">
             @csrf
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="current_password">

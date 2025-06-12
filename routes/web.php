@@ -10,6 +10,7 @@ use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController
 use App\Http\Controllers\Mentor\ModuleCategoryController as MentorModuleCategoryController;
 use App\Http\Controllers\Mentor\ModuleController as MentorModuleController;
 use App\Http\Controllers\Mentor\SantriController as MentorSantriController;
+use App\Http\Controllers\Mentor\MentorProfileController;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -31,6 +32,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
     Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/update-details', [AdminProfileController::class, 'updateProfileDetails'])->name('profile.updateDetails');
     Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
     Route::resource('/santri', SantriController::class)->names('santri');
@@ -40,6 +42,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 // Mentor Routes
 Route::middleware(['auth'])->prefix('mentor')->name('mentor.')->group(function () {
     Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [MentorProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/update-details', [MentorProfileController::class, 'updateProfileDetails'])->name('profile.updateDetails');
+    Route::post('/profile/update-password', [MentorProfileController::class, 'updatePassword'])->name('profile.updatePassword');
     Route::resource('/module-categories', MentorModuleCategoryController::class)->names('module-categories');
     Route::resource('/modules', MentorModuleController::class)->names('modules');
     Route::post('/modules/upload-image', [MentorModuleController::class, 'uploadImage'])->name('modules.uploadImage');
