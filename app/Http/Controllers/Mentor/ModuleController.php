@@ -20,7 +20,7 @@ class ModuleController extends Controller
     public function index()
     {
         $mentor = Auth::user();
-        $modules = Module::where('user_id', $mentor->id)->with(['major', 'moduleCategory'])->get();
+        $modules = Module::where('user_id', $mentor->id)->with(['major', 'moduleCategory'])->paginate(10);
         return view('mentor.modules.index', compact('modules'));
     }
 

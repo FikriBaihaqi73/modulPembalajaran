@@ -15,7 +15,7 @@ class ModuleCategoryController extends Controller
     public function index()
     {
         $mentor = Auth::user();
-        $moduleCategories = ModuleCategory::where('major_id', $mentor->major_id)->get();
+        $moduleCategories = ModuleCategory::where('major_id', $mentor->major_id)->paginate(10);
         return view('mentor.module_categories.index', compact('moduleCategories'));
     }
 

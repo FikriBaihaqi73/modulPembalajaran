@@ -40,4 +40,9 @@
             </tbody>
         </table>
     </div>
+
+    {{-- Pagination Links --}}
+    <div class="mt-4">
+        {{ $mentor->links() }}
+    </div>
 @endsection

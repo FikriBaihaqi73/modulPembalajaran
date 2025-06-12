@@ -13,7 +13,7 @@ class SantriController extends Controller
     public function index()
     {
         $santriRole = Role::where('name', 'Santri')->first();
-        $santri = $santriRole ? User::where('role_id', $santriRole->id)->with('major')->get() : collect();
+        $santri = $santriRole ? User::where('role_id', $santriRole->id)->with('major')->paginate(10) : collect();
         return view('admin.santri.index', compact('santri'));
     }
 

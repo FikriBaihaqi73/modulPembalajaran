@@ -20,7 +20,7 @@ class SantriController extends Controller
         $santri = User::where('role_id', $santriRole->id)
                         ->where('major_id', $mentor->major_id)
                         ->with('major')
-                        ->get();
+                        ->paginate(10);
         return view('mentor.santri.index', compact('santri'));
     }
 

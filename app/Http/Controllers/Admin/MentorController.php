@@ -13,7 +13,7 @@ class MentorController extends Controller
     public function index()
     {
         $mentorRole = Role::where('name', 'Mentor')->first();
-        $mentor = $mentorRole ? User::where('role_id', $mentorRole->id)->with('major')->get() : collect();
+        $mentor = $mentorRole ? User::where('role_id', $mentorRole->id)->with('major')->paginate(10) : collect();
         return view('admin.mentor.index', compact('mentor'));
     }
 
