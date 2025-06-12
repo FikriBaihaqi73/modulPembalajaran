@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Http\Controllers\Controller;
 
-class AdminController extends Controller
+class DashboardController extends Controller
 {
     public function index()
     {
@@ -17,6 +17,6 @@ class AdminController extends Controller
         $totalSantri = $santriRole ? User::where('role_id', $santriRole->id)->count() : 0;
         $totalMentor = $mentorRole ? User::where('role_id', $mentorRole->id)->count() : 0;
 
-        return view('admin.dashboard', compact('totalSantri', 'totalMentor'));
+        return view('admin.dashboard.index', compact('totalSantri', 'totalMentor'));
     }
 }

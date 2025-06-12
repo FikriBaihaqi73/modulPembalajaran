@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\SantriController;
 use App\Http\Controllers\Admin\MentorController;
-use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\ModuleCategoryController as MentorModuleCategoryController;
 use App\Http\Controllers\Mentor\ModuleController as MentorModuleController;
@@ -29,11 +29,11 @@ Route::get('/home', function () {
 
 // Admin Routes
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
-    Route::post('/profile/update-details', [AdminProfileController::class, 'updateProfileDetails'])->name('profile.updateDetails');
-    Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/update-details', [ProfileController::class, 'updateProfileDetails'])->name('profile.updateDetails');
+    Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
     Route::resource('/santri', SantriController::class)->names('santri');
     Route::resource('/mentor', MentorController::class)->names('mentor');

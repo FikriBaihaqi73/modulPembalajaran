@@ -14,13 +14,13 @@ class SantriController extends Controller
     {
         $santriRole = Role::where('name', 'Santri')->first();
         $santri = $santriRole ? User::where('role_id', $santriRole->id)->with('major')->get() : collect();
-        return view('admin.santri', compact('santri'));
+        return view('admin.santri.index', compact('santri'));
     }
 
     public function create()
     {
         $majors = Major::all();
-        return view('admin.santri-create', compact('majors'));
+        return view('admin.santri.create', compact('majors'));
     }
 
     public function store(Request $request)
@@ -42,7 +42,7 @@ class SantriController extends Controller
     {
         $santri = User::where('role_id', Role::where('name', 'Santri')->first()->id)->with('major')->findOrFail($id);
         $majors = Major::all();
-        return view('admin.santri-edit', compact('santri', 'majors'));
+        return view('admin.santri.edit', compact('santri', 'majors'));
     }
 
     public function update(Request $request, $id)

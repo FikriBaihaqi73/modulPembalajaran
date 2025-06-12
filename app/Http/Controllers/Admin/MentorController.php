@@ -14,13 +14,13 @@ class MentorController extends Controller
     {
         $mentorRole = Role::where('name', 'Mentor')->first();
         $mentor = $mentorRole ? User::where('role_id', $mentorRole->id)->with('major')->get() : collect();
-        return view('admin.mentor', compact('mentor'));
+        return view('admin.mentor.index', compact('mentor'));
     }
 
     public function create()
     {
         $majors = Major::all();
-        return view('admin.mentor-create', compact('majors'));
+        return view('admin.mentor.create', compact('majors'));
     }
 
     public function store(Request $request)
@@ -42,7 +42,7 @@ class MentorController extends Controller
     {
         $mentor = User::where('role_id', Role::where('name', 'Mentor')->first()->id)->with('major')->findOrFail($id);
         $majors = Major::all();
-        return view('admin.mentor-edit', compact('mentor', 'majors'));
+        return view('admin.mentor.edit', compact('mentor', 'majors'));
     }
 
     public function update(Request $request, $id)

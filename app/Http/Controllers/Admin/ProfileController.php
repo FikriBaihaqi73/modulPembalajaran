@@ -9,11 +9,11 @@ use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\Controller;
 
-class AdminProfileController extends Controller
+class ProfileController extends Controller
 {
     public function index()
     {
-        return view('admin.profile');
+        return view('admin.profile.index');
     }
 
     public function updateProfileDetails(Request $request)
