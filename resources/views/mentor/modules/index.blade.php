@@ -7,7 +7,7 @@
     <div class="mt-4 mb-4">
         <a href="{{ route('mentor.modules.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded">Tambah Modul</a>
     </div>
-    <div>
+    <div class="overflow-x-auto">
         <table class="min-w-full bg-white rounded shadow">
             <thead>
                 <tr>

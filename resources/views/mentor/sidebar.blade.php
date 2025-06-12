@@ -36,6 +36,13 @@
             </svg>
             <span class="mx-3 text-sm transition-opacity duration-300 opacity-100 whitespace-nowrap overflow-hidden group-[.sidebar-collapsed-text]:opacity-0">Modul Pembelajaran</span>
         </a>
+        <a class="flex items-center mt-4 py-2 px-6 text-gray-100 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 group" href="{{ route('mentor.santri.index') }}">
+            <svg class="h-6 w-6 flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4C14.2091 4 16 5.79086 16 8C16 10.2091 14.2091 12 12 12C9.79086 12 8 10.2091 8 8C8 5.79086 9.79086 4 12 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 20V17C4 15.3431 5.34315 14 7 14H17C18.6569 14 20 15.3431 20 17V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="mx-3 text-sm transition-opacity duration-300 opacity-100 whitespace-nowrap overflow-hidden group-[.sidebar-collapsed-text]:opacity-0">Manajemen Santri</span>
+        </a>
         <!-- Add more mentor-specific navigation links here -->
     </nav>
 </div>

@@ -17,6 +17,18 @@
                 @enderror
             </div>
             <div class="mb-4">
+                <label for="module_category_id" class="block text-gray-700 text-sm font-bold mb-2">Kategori Modul:</label>
+                <select name="module_category_id" id="module_category_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('module_category_id') border-red-500 @enderror" required>
+                    <option value="">Pilih Kategori Modul</option>
+                    @foreach($moduleCategories as $category)
+                        <option value="{{ $category->id }}" {{ old('module_category_id', $module->module_category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+                @error('module_category_id')
+                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="mb-4">
                 <label for="content" class="block text-gray-700 text-sm font-bold mb-2">Konten Modul:</label>
                 <div id="tiptap-editor"></div>
                 <input type="hidden" name="content" id="content-hidden" value="{{ old('content', $module->content) }}">
@@ -31,18 +43,6 @@
                 @endif
                 <input type="file" name="thumbnail" id="thumbnail" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('thumbnail') border-red-500 @enderror">
                 @error('thumbnail')
-                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                @enderror
-            </div>
-            <div class="mb-4">
-                <label for="module_category_id" class="block text-gray-700 text-sm font-bold mb-2">Kategori Modul:</label>
-                <select name="module_category_id" id="module_category_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('module_category_id') border-red-500 @enderror" required>
-                    <option value="">Pilih Kategori Modul</option>
-                    @foreach($moduleCategories as $category)
-                        <option value="{{ $category->id }}" {{ old('module_category_id', $module->module_category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                    @endforeach
-                </select>
-                @error('module_category_id')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>

@@ -3,37 +3,44 @@
 @section('title', 'Detail Modul')
 
 @section('content')
-    <h2 class="text-3xl font-semibold text-gray-800">Detail Modul</h2>
+    <div class="bg-white p-6 rounded shadow mb-6">
+        {{-- Thumbnail --}}
+        @if ($module->thumbnail)
+            <div class="flex justify-center mb-6">
+                <img src="{{ $module->thumbnail }}" alt="Thumbnail Modul" class="w-full max-w-screen-md h-auto object-cover rounded-lg shadow-md">
+            </div>
+        @endif
 
-    <div class="mt-4 bg-white p-6 rounded shadow">
-        <div class="mb-4">
-            <p class="text-gray-700 text-sm font-bold">Nama Modul:</p>
-            <p class="text-gray-900">{{ $module->name }}</p>
-        </div>
-        <div class="mb-4">
-            <p class="text-gray-700 text-sm font-bold">Kategori Modul:</p>
-            <p class="text-gray-900">{{ $module->moduleCategory->name ?? 'N/A' }}</p>
-        </div>
-        <div class="mb-4">
-            <p class="text-gray-700 text-sm font-bold">Jurusan:</p>
-            <p class="text-gray-900">{{ $module->major->name ?? 'N/A' }}</p>
-        </div>
-        <div class="mb-4">
-            <p class="text-gray-700 text-sm font-bold">Thumbnail Modul:</p>
-            @if ($module->thumbnail)
-                <img src="{{ $module->thumbnail }}" alt="Thumbnail Modul" class="w-48 h-auto object-cover mb-2">
-            @else
-                <p class="text-gray-900">Tidak Ada</p>
-            @endif
-        </div>
-        <div class="mb-4">
-            <p class="text-gray-700 text-sm font-bold">Konten Modul:</p>
-            <div class="prose max-w-none">
-                {!! $module->content !!}
+        {{-- Title --}}
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-2">{{ $module->name }}</h1>
+
+        {{-- Creation Date --}}
+        <p class="text-gray-600 text-sm mb-4">
+            Dibuat pada: {{ \Carbon\Carbon::parse($module->created_at)->locale('id')->translatedFormat('d F Y, H:i') }}
+        </p>
+
+        {{-- Categories and Major --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700 mb-6">
+            <div>
+                <p class="font-bold">Kategori Modul:</p>
+                <p>{{ $module->moduleCategory->name ?? 'N/A' }}</p>
+            </div>
+            <div>
+                <p class="font-bold">Jurusan:</p>
+                <p>{{ $module->major->name ?? 'N/A' }}</p>
             </div>
         </div>
-        <div class="flex items-center justify-between">
-            <a href="{{ route('mentor.modules.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+
+        {{-- Module Content --}}
+        <div class="prose max-w-none text-gray-800 leading-relaxed">
+            {!! $module->content !!}
+        </div>
+
+        <hr class="my-6 border-gray-300">
+
+        <div class="mt-6">
+            <a href="{{ route('mentor.modules.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Kembali ke Daftar Modul
             </a>
         </div>

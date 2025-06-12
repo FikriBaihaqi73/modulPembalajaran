@@ -1,11 +1,13 @@
 /* Basic editor styles */
 .tiptap-container {
-  border: 1px solid #ddd; /* Softer border */
+  border: 1px solid #ccc; /* A clear border for the whole component */
   border-radius: 8px; /* More rounded corners */
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  overflow-x: auto; /* Allow horizontal scrolling for wider content */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* More visible shadow for the whole component */
+  width: 100%; /* Ensure it takes full available width */
+  height: auto; /* Allow height to adjust based on content */
 }
 
 .tiptap-menubar {
@@ -13,7 +15,7 @@
   flex-wrap: wrap;
   align-items: center;
   padding: 8px; /* Consistent padding */
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eee; /* Separator for the menubar */
   background: #f8f9fa; /* Light background for toolbar */
   position: sticky;
   top: 0;
@@ -42,13 +44,56 @@
   color: white;
 }
 
+.tiptap-menubar button .mobile-label {
+  display: none; /* Hidden by default on desktop */
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .tiptap-menubar {
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Align items to start */
+  }
+
+  .tiptap-menubar button {
+    display: flex;
+    flex-direction: column; /* Stack icon and text vertically */
+    align-items: center;
+    justify-content: center;
+    padding: 8px 6px; /* Adjust padding for smaller buttons */
+    font-size: 0.75em; /* Smaller font size for mobile label */
+    width: auto; /* Allow buttons to shrink/grow based on content */
+    flex-basis: auto; /* Allow flex items to size based on content */
+  }
+
+  .tiptap-menubar button .mobile-label {
+    display: inline-block; /* Show label on mobile */
+    margin-top: 4px; /* Space between icon and text */
+    white-space: nowrap; /* Prevent text wrapping */
+  }
+
+  .tiptap-menubar button svg {
+    margin-bottom: 2px; /* Small space between icon and label */
+  }
+
+  .tiptap-menubar input[type="color"] {
+    height: 36px; /* Adjust height for mobile */
+    padding: 2px; /* Adjust padding */
+  }
+}
+
 /* Editor content styles */
 .tiptap-container .ProseMirror {
-  min-height: 250px; /* Increased min-height */
+  min-height: 700px; /* Increased min-height for more vertical space */
   outline: none;
   padding: 16px; /* Padding for content area */
   flex-grow: 1; /* Allow content area to expand */
-  background-color: #fff; /* White background for content */
+  background-color: #ffffff; /* Explicitly white background for content */
+  width: 100%; /* Ensure it takes full available width */
+  height: 100%; /* Ensure it takes full available height of its flex parent */
+  border: 2px solid #b0b0b0; /* Thicker, more visible border for content area */
+  border-radius: 0 0 8px 8px; /* Match bottom border radius of container */
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.15); /* Stronger inner shadow for paper effect */
 }
 
 .tiptap-container .ProseMirror:focus {
@@ -171,3 +216,10 @@
 
 /* Strike */
 .tiptap-container .ProseMirror s { text-decoration: line-through; }
+
+div.tiptap.ProseMirror {
+    min-height: 700px;
+    padding: 16px;
+    border: 1px solid #ccc;
+}
+

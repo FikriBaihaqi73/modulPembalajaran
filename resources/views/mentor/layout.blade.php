@@ -13,7 +13,7 @@
         @include('mentor.sidebar')
 
         <!-- Page Content -->
-        <div class="flex-1 flex flex-col overflow-hidden transition-all duration-300">
+        <div class="flex-1 flex flex-col overflow-x-auto transition-all duration-300">
             <header class="flex items-center justify-between px-6 py-4 bg-white">
                 <div class="flex items-center">
                     <button id="sidebarToggle" class="text-gray-500 focus:outline-none md:hidden border-none outline-none bg-transparent">
@@ -48,8 +48,8 @@
                 </div>
             </header>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
-                <div class="container mx-auto px-6 py-8">
+            <main class="flex-1 overflow-x-auto overflow-y-auto bg-gray-200">
+                <div class="mx-auto px-6 py-8">
                     @if(session('success'))
                         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
                             <span class="block sm:inline">{{ session('success') }}</span>

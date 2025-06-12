@@ -5,7 +5,7 @@
 @section('content')
     <h2 class="text-3xl font-semibold text-gray-800">Tambah Modul Baru</h2>
 
-    <div class="mt-4 bg-white p-6 rounded shadow">
+    <div class="mt-4 bg-white p-6 rounded shadow w-full">
         <form action="{{ route('mentor.modules.store') }}" method="POST" enctype="multipart/form-data" id="moduleForm">
             @csrf
             <div class="mb-4">
@@ -29,7 +29,7 @@
             </div>
             <div class="mb-4">
                 <label for="content" class="block text-gray-700 text-sm font-bold mb-2">Konten Modul:</label>
-                <div id="tiptap-editor"></div>
+                <div id="tiptap-editor" class="w-full min-h-[500px] overflow-auto"></div>
                 <input type="hidden" name="content" id="content-hidden" value="{{ old('content') }}">
                 @error('content')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
