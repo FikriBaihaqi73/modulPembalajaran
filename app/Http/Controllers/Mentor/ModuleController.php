@@ -17,11 +17,30 @@ class ModuleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $mentor = Auth::user();
-        $modules = Module::where('user_id', $mentor->id)->with(['major', 'moduleCategory'])->paginate(10);
-        return view('mentor.modules.index', compact('modules'));
+        $query = Module::where('user_id', $mentor->id)->with(['major', 'moduleCategory']);
+
+        // Apply search filter
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('content', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Apply module category filter
+        if ($request->has('module_category_id') && $request->input('module_category_id') != '') {
+            $categoryId = $request->input('module_category_id');
+            $query->where('module_category_id', $categoryId);
+        }
+
+        $modules = $query->paginate(10);
+        $moduleCategories = ModuleCategory::where('major_id', $mentor->major_id)->get(); // Get categories for the filter dropdown
+
+        return view('mentor.modules.index', compact('modules', 'moduleCategories'));
     }
 
     /**

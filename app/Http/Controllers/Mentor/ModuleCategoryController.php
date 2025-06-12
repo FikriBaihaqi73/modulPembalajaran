@@ -12,10 +12,18 @@ class ModuleCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $mentor = Auth::user();
-        $moduleCategories = ModuleCategory::where('major_id', $mentor->major_id)->paginate(10);
+        $query = ModuleCategory::where('major_id', $mentor->major_id);
+
+        // Apply search filter
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $moduleCategories = $query->paginate(10);
         return view('mentor.module_categories.index', compact('moduleCategories'));
     }
 

@@ -13,14 +13,24 @@ class SantriController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $mentor = Auth::user();
         $santriRole = Role::where('name', 'Santri')->first();
-        $santri = User::where('role_id', $santriRole->id)
+        $query = User::where('role_id', $santriRole->id)
                         ->where('major_id', $mentor->major_id)
-                        ->with('major')
-                        ->paginate(10);
+                        ->with('major');
+
+        // Apply search filter
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('username', 'like', '%' . $search . '%');
+            });
+        }
+
+        $santri = $query->paginate(10);
         return view('mentor.santri.index', compact('santri'));
     }
 

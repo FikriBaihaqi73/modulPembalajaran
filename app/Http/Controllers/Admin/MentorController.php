@@ -10,11 +10,30 @@ use App\Http\Controllers\Controller;
 
 class MentorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $mentorRole = Role::where('name', 'Mentor')->first();
-        $mentor = $mentorRole ? User::where('role_id', $mentorRole->id)->with('major')->paginate(10) : collect();
-        return view('admin.mentor.index', compact('mentor'));
+        $query = User::where('role_id', $mentorRole->id)->with('major');
+
+        // Apply search filter
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('username', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Apply major filter
+        if ($request->has('major_id') && $request->input('major_id') != '') {
+            $majorId = $request->input('major_id');
+            $query->where('major_id', $majorId);
+        }
+
+        $mentor = $query->paginate(10);
+        $majors = Major::all(); // Get all majors for the filter dropdown
+
+        return view('admin.mentor.index', compact('mentor', 'majors'));
     }
 
     public function create()

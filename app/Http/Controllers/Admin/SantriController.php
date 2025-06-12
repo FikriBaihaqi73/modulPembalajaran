@@ -10,11 +10,30 @@ use App\Http\Controllers\Controller;
 
 class SantriController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $santriRole = Role::where('name', 'Santri')->first();
-        $santri = $santriRole ? User::where('role_id', $santriRole->id)->with('major')->paginate(10) : collect();
-        return view('admin.santri.index', compact('santri'));
+        $query = User::where('role_id', $santriRole->id)->with('major');
+
+        // Apply search filter
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('username', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Apply major filter
+        if ($request->has('major_id') && $request->input('major_id') != '') {
+            $majorId = $request->input('major_id');
+            $query->where('major_id', $majorId);
+        }
+
+        $santri = $query->paginate(10);
+        $majors = Major::all(); // Get all majors for the filter dropdown
+
+        return view('admin.santri.index', compact('santri', 'majors'));
     }
 
     public function create()
