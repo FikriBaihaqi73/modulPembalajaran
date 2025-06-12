@@ -81,6 +81,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // Tiptap Editor Initialization
     const editorRoot = document.getElementById('tiptap-editor');
     const hiddenInput = document.getElementById('content-hidden');
+    const moduleForm = document.getElementById('moduleForm');
+
+    if (moduleForm) {
+        moduleForm.addEventListener('submit', function (event) {
+            // Only prevent default if the actual submit button was not clicked
+            // This prevents auto-submit when Tiptap's image upload input is triggered
+            if (document.activeElement !== this.querySelector('button[type="submit"]')) {
+                event.preventDefault();
+            }
+        });
+    }
 
     if (editorRoot && hiddenInput) {
         import('./components/TiptapEditor').then(({ default: TiptapEditor }) => {

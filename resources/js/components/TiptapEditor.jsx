@@ -9,6 +9,7 @@ import Highlight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
+import axios from 'axios';
 
 const MenuBar = ({ editor }) => {
   if (!editor) {
@@ -16,11 +17,38 @@ const MenuBar = ({ editor }) => {
   }
 
   const addImage = useCallback(() => {
-    const url = window.prompt('URL');
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/jpeg,image/png,image/gif,image/svg+xml,image/webp');
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return;
 
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
+      const maxSize = 3 * 1024 * 1024; // 3MB
+      if (file.size > maxSize) {
+        alert('Ukuran gambar maksimal 3MB.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      try {
+        const response = await axios.post('/mentor/modules/upload-image', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        const url = response.data.url;
+        if (url) {
+          editor.chain().focus().setImage({ src: url }).run();
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        alert('Gagal mengunggah gambar. Pastikan ukuran gambar tidak melebihi 3MB dan formatnya benar.');
+      }
+    };
+    input.click();
   }, [editor]);
 
   const addYoutubeVideo = useCallback(() => {
@@ -189,7 +217,7 @@ const MenuBar = ({ editor }) => {
       >
         unset link
       </button>
-      <button onClick={addImage}>add image</button>
+      <button onClick={addImage} type="button">add image</button>
       <button onClick={addYoutubeVideo}>add youtube video</button>
       <button
         onClick={() => editor.chain().focus().toggleHighlight().run()}

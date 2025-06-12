@@ -6,7 +6,7 @@
     <h2 class="text-3xl font-semibold text-gray-800">Tambah Modul Baru</h2>
 
     <div class="mt-4 bg-white p-6 rounded shadow">
-        <form action="{{ route('mentor.modules.store') }}" method="POST">
+        <form action="{{ route('mentor.modules.store') }}" method="POST" enctype="multipart/form-data" id="moduleForm">
             @csrf
             <div class="mb-4">
                 <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nama Modul:</label>
@@ -32,6 +32,13 @@
                 <div id="tiptap-editor"></div>
                 <input type="hidden" name="content" id="content-hidden" value="{{ old('content') }}">
                 @error('content')
+                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="mb-4">
+                <label for="thumbnail" class="block text-gray-700 text-sm font-bold mb-2">Thumbnail Modul:</label>
+                <input type="file" name="thumbnail" id="thumbnail" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('thumbnail') border-red-500 @enderror">
+                @error('thumbnail')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
             </div>

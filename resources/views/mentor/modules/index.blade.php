@@ -13,6 +13,7 @@
                 <tr>
                     <th class="py-2 px-4 border-b text-center">Nomor</th>
                     <th class="py-2 px-4 border-b text-center">Nama Modul</th>
+                    <th class="py-2 px-4 border-b text-center">Thumbnail</th>
                     <th class="py-2 px-4 border-b text-center">Content</th>
                     <th class="py-2 px-4 border-b text-center">Kategori</th>
                     <th class="py-2 px-4 border-b text-center">Jurusan</th>
@@ -24,6 +25,13 @@
                 <tr>
                     <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $module->name }}</td>
+                    <td class="py-2 px-4 border-b text-center">
+                        @if ($module->thumbnail)
+                            <img src="{{ $module->thumbnail }}" alt="Thumbnail" class="h-12 w-12 object-cover rounded-full mx-auto">
+                        @else
+                            Tidak Ada
+                        @endif
+                    </td>
                     <td class="py-2 px-4 border-b text-center">{!! Str::limit(strip_tags($module->content), 50) !!}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $module->moduleCategory->name ?? 'N/A' }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $module->major->name ?? 'N/A' }}</td>
@@ -39,7 +47,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="py-2 px-4 text-center">Tidak ada modul.</td>
+                    <td colspan="7" class="py-2 px-4 text-center">Tidak ada modul.</td>
                 </tr>
                 @endforelse
             </tbody>

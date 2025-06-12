@@ -19,6 +19,14 @@
             <p class="text-gray-900">{{ $module->major->name ?? 'N/A' }}</p>
         </div>
         <div class="mb-4">
+            <p class="text-gray-700 text-sm font-bold">Thumbnail Modul:</p>
+            @if ($module->thumbnail)
+                <img src="{{ $module->thumbnail }}" alt="Thumbnail Modul" class="w-48 h-auto object-cover mb-2">
+            @else
+                <p class="text-gray-900">Tidak Ada</p>
+            @endif
+        </div>
+        <div class="mb-4">
             <p class="text-gray-700 text-sm font-bold">Konten Modul:</p>
             <div class="prose max-w-none">
                 {!! $module->content !!}

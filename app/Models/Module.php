@@ -9,8 +9,19 @@ class Module extends Model
     protected $fillable = [
         'name',
         'content',
+        'thumbnail',
         'major_id',
         'module_category_id',
         'user_id',
     ];
+
+    public function major()
+    {
+        return $this->belongsTo(Major::class);
+    }
+
+    public function moduleCategory()
+    {
+        return $this->belongsTo(ModuleCategory::class);
+    }
 }

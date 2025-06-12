@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Register the storeOnCloudinary macro for UploadedFile
+        UploadedFile::macro('storeOnCloudinary', function ($folder = null, $options = []) {
+            return Storage::disk('cloudinary')->putFile($folder, $this, $options);
+        });
     }
 }

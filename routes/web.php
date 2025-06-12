@@ -42,5 +42,6 @@ Route::middleware(['auth'])->prefix('mentor')->name('mentor.')->group(function (
     Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
     Route::resource('/module-categories', MentorModuleCategoryController::class)->names('module-categories');
     Route::resource('/modules', MentorModuleController::class)->names('modules');
+    Route::post('/modules/upload-image', [MentorModuleController::class, 'uploadImage'])->name('modules.uploadImage');
     Route::resource('/santri', MentorSantriController::class)->names('santri');
 });

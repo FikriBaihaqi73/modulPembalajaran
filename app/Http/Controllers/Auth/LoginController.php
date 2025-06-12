@@ -49,11 +49,9 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        Log::info('Attempting login with credentials:', $credentials);
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            Log::info('Login successful for user:', ['username' => $request->username]);
 
             // Check user role and redirect accordingly
             if (Auth::user()->role->name === 'Admin') {
@@ -65,7 +63,6 @@ class LoginController extends Controller
             }
         }
 
-        Log::warning('Login failed for user:', ['username' => $request->username]);
         return back()->withErrors([
             'username' => 'The provided credentials do not match our records.',
         ])->onlyInput('username');
