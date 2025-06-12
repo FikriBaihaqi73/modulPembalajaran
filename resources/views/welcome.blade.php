@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modul Pembelajaran Santri Pondok IT</title>
+    <link rel="icon" href="{{ asset('android-chrome-512x512.png') }}" type="image/png">
     @vite('resources/css/app.css')
 </head>
 <body>
