@@ -17,7 +17,7 @@ PembelajaranApp adalah platform edukasi interaktif yang dirancang untuk memfasil
 -   **Manajemen Modul:** Buat, edit, lihat, dan kelola modul pembelajaran yang terkait dengan jurusan spesifik mentor.
 -   **Manajemen Kategori Modul:** Atur kategori untuk modul mereka.
 -   **Manajemen Santri:** Kelola data santri yang terkait dengan jurusan mereka.
--   **Pengunggahan Konten Kaya:** Gunakan editor Tiptap dengan kemampuan pengunggahan gambar dan pratinjau video YouTube yang dapat diubah ukurannya.
+-   **Pengunggahan Konten Kaya:** Gunakan editor Tiptap dengan kemampuan pengunggahan gambar dan pratinjau video YouTube.
 -   **Kontrol Visibilitas Modul:** Tentukan apakah modul terlihat oleh santri atau tidak.
 
 ### Untuk Admin:
