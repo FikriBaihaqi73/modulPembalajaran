@@ -31,7 +31,7 @@ PembelajaranApp adalah platform edukasi interaktif yang dirancang untuk memfasil
 -   **Backend:** Laravel (PHP Framework)
 -   **Frontend:** Blade (Templating Engine), JavaScript (dengan React untuk editor Tiptap)
 -   **Database:** MySQL (atau database relasional lainnya yang didukung Laravel)
--   **Editor Konten:** Tiptap (dengan ekstensi kustom untuk YouTube resizable)
+-   **Editor Konten:** Tiptap
 -   **Ikon:** Font Awesome
 -   **Styling:** Tailwind CSS
 -   **Penyimpanan Media:** Cloudinary (untuk thumbnail modul)
