@@ -13,6 +13,7 @@ use App\Http\Controllers\Mentor\SantriController as MentorSantriController;
 use App\Http\Controllers\Mentor\MentorProfileController;
 use App\Http\Controllers\Frontend\ModuleController as FrontendModuleController;
 use App\Http\Controllers\Frontend\SantriProfileController;
+use App\Http\Controllers\Santri\ModuleDownloadController;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -66,6 +67,11 @@ Route::middleware(['auth'])->prefix('mentor')->name('mentor.')->group(function (
 Route::prefix('santri')->name('santri.')->group(function () {
     Route::get('/modules', [FrontendModuleController::class, 'index'])->name('modules.index');
     Route::get('/modules/{module}', [FrontendModuleController::class, 'show'])->name('modules.show');
+
+    // New download routes
+    Route::get('/modules/{module}/download-pdf', [ModuleDownloadController::class, 'downloadSingleModulePdf'])->name('modules.download.pdf');
+    Route::get('/modules/category/{categoryName}/download-zip', [ModuleDownloadController::class, 'downloadModulesByCategoryZip'])->name('modules.download.category.zip');
+
     Route::get('/profile', [SantriProfileController::class, 'index'])->name('profile');
     Route::post('/profile/update-details', [SantriProfileController::class, 'updateDetails'])->name('profile.updateDetails');
     Route::post('/profile/update-password', [SantriProfileController::class, 'updatePassword'])->name('profile.updatePassword');
