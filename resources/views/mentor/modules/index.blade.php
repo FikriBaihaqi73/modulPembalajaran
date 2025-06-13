@@ -9,14 +9,17 @@
 
         <form action="{{ route('mentor.modules.index') }}" method="GET" class="flex items-center space-x-4">
             <input type="text" name="search" placeholder="Cari Modul..." value="{{ request('search') }}" class="border rounded px-3 py-2">
-            <select name="module_category_id" class="border rounded px-3 py-2">
+            <select name="module_category_ids[]" multiple class="border rounded px-3 py-2 h-auto max-h-40 min-h-fit overflow-auto">
                 <option value="">Semua Kategori</option>
+                @php
+                    $selectedCategories = (array)request('module_category_ids');
+                @endphp
                 @foreach($moduleCategories as $category)
-                    <option value="{{ $category->id }}" {{ request('module_category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                    <option value="{{ $category->id }}" {{ in_array($category->id, $selectedCategories) ? 'selected' : '' }}>{{ $category->name }}</option>
                 @endforeach
             </select>
             <button type="submit" class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Cari & Filter</button>
-            @if(request('search') || request('module_category_id'))
+            @if(request('search') || request('module_category_ids'))
                 <a href="{{ route('mentor.modules.index') }}" class="text-red-600">Reset</a>
             @endif
         </form>
@@ -47,7 +50,13 @@
                         @endif
                     </td>
                     <td class="py-2 px-4 border-b text-center">{!! Str::limit(strip_tags($module->content), 50) !!}</td>
-                    <td class="py-2 px-4 border-b text-center">{{ $module->moduleCategory->name ?? 'N/A' }}</td>
+                    <td class="py-2 px-4 border-b text-center">
+                        @forelse($module->moduleCategory as $category)
+                            <span class="inline-block bg-blue-200 text-blue-800 text-xs px-2 py-1 rounded-full">{{ $category->name }}</span>@if(!$loop->last),@endif
+                        @empty
+                            N/A
+                        @endforelse
+                    </td>
                     <td class="py-2 px-4 border-b text-center">{{ $module->major->name ?? 'N/A' }}</td>
                     <td class="py-2 px-4 border-b text-center">
                         <a href="{{ route('mentor.modules.show', $module->id) }}" class="text-green-600 mr-2">Lihat</a>

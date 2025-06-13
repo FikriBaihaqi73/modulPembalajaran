@@ -12,4 +12,9 @@ class ModuleCategory extends Model
     {
         return $this->belongsTo(Major::class);
     }
+
+    public function modules()
+    {
+        return $this->belongsToMany(Module::class, 'module_module_category', 'module_category_id', 'module_id');
+    }
 }

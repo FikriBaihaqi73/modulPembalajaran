@@ -11,7 +11,6 @@ class Module extends Model
         'content',
         'thumbnail',
         'major_id',
-        'module_category_id',
         'user_id',
     ];
 
@@ -22,6 +21,6 @@ class Module extends Model
 
     public function moduleCategory()
     {
-        return $this->belongsTo(ModuleCategory::class);
+        return $this->belongsToMany(ModuleCategory::class, 'module_module_category', 'module_id', 'module_category_id');
     }
 }

@@ -31,10 +31,18 @@ class ModuleController extends Controller
             });
         }
 
-        // Apply module category filter
-        if ($request->has('module_category_id') && $request->input('module_category_id') != '') {
+        // Apply module category filter (if module_category_ids is provided as an array)
+        if ($request->has('module_category_ids') && is_array($request->input('module_category_ids'))) {
+            $categoryIds = $request->input('module_category_ids');
+            $query->whereHas('moduleCategory', function ($q) use ($categoryIds) {
+                $q->whereIn('module_categories.id', $categoryIds);
+            });
+        } else if ($request->has('module_category_id') && $request->input('module_category_id') != '') {
+            // Fallback for single category filter if still used (can be removed later if not needed)
             $categoryId = $request->input('module_category_id');
-            $query->where('module_category_id', $categoryId);
+            $query->whereHas('moduleCategory', function ($q) use ($categoryId) {
+                $q->where('module_categories.id', $categoryId);
+            });
         }
 
         $modules = $query->paginate(10);
@@ -64,7 +72,8 @@ class ModuleController extends Controller
             'name' => 'required|string|max:255',
             'content' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimetypes:image/jpeg,image/png,image/gif,image/svg+xml,image/webp|max:3072', // Max 3MB (3072 KB)
-            'module_category_id' => ['required', 'exists:module_categories,id',
+            'module_category_ids' => ['required', 'array'], // Expect an array of IDs
+            'module_category_ids.*' => ['exists:module_categories,id',
                 function ($attribute, $value, $fail) use ($mentor) {
                     if (!ModuleCategory::where('id', $value)->where('major_id', $mentor->major_id)->exists()) {
                         $fail('Kategori modul yang dipilih tidak valid untuk jurusan Anda.');
@@ -102,14 +111,16 @@ class ModuleController extends Controller
             }
         }
 
-        Module::create([
+        $module = Module::create([
             'name' => $validatedData['name'],
             'content' => $validatedData['content'],
             'thumbnail' => $thumbnailUrl,
             'major_id' => $mentor->major_id,
-            'module_category_id' => $validatedData['module_category_id'],
             'user_id' => $mentor->id,
         ]);
+
+        // Attach categories to the module
+        $module->moduleCategory()->sync($validatedData['module_category_ids']);
 
         return redirect()->route('mentor.modules.index')->with('success', 'Modul berhasil ditambahkan.');
     }
@@ -130,7 +141,7 @@ class ModuleController extends Controller
     public function edit(string $id)
     {
         $mentor = Auth::user();
-        $module = Module::where('user_id', $mentor->id)->findOrFail($id);
+        $module = Module::where('user_id', $mentor->id)->with('moduleCategory')->findOrFail($id);
         $moduleCategories = ModuleCategory::where('major_id', $mentor->major_id)->get();
         return view('mentor.modules.edit', compact('module', 'moduleCategories'));
     }
@@ -149,7 +160,8 @@ class ModuleController extends Controller
             'name' => 'required|string|max:255',
             'content' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimetypes:image/jpeg,image/png,image/gif,image/svg+xml,image/webp|max:3072', // Max 3MB (3072 KB)
-            'module_category_id' => ['required', 'exists:module_categories,id',
+            'module_category_ids' => ['required', 'array'], // Expect an array of IDs
+            'module_category_ids.*' => ['exists:module_categories,id',
                 function ($attribute, $value, $fail) use ($mentor) {
                     if (!ModuleCategory::where('id', $value)->where('major_id', $mentor->major_id)->exists()) {
                         $fail('Kategori modul yang dipilih tidak valid untuk jurusan Anda.');
@@ -227,8 +239,10 @@ class ModuleController extends Controller
             'name' => $validatedData['name'],
             'content' => $validatedData['content'],
             'thumbnail' => $thumbnailUrl,
-            'module_category_id' => $validatedData['module_category_id'],
         ]);
+
+        // Sync categories to the module
+        $module->moduleCategory()->sync($validatedData['module_category_ids']);
 
         $newContent = $module->content; // Get new content after update
 
