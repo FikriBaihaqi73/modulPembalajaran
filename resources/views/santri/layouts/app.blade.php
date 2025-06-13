@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Platform modul pembelajaran untuk Santri Pondok IT">
     <title>@yield('title', 'Modul Pembelajaran Santri Pondok IT')</title>
-    <link rel="icon" href="{{ asset('android-chrome-512x512.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,10 +64,10 @@
             <div class="border-t border-gray-800 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-sm text-gray-500">&copy; {{ date('Y') }} Modul Pembelajaran Santri Pondok IT. All rights reserved.</p>
                 <div class="flex space-x-4 mt-4 md:mt-0">
-                    <a href="https://www.instagram.com/pondokitofficial/" class="text-gray-400 hover:text-white transition-colors">
+                    <a href="https://www.instagram.com/pondokitofficial/" target="_blank" class="text-gray-400 hover:text-white transition-colors">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a href="https://www.facebook.com/pondokit?locale=id_ID" class="text-gray-400 hover:text-white transition-colors">
+                    <a href="https://www.facebook.com/pondokit?locale=id_ID" target="_blank" class="text-gray-400 hover:text-white transition-colors">
                         <i class="fab fa-facebook"></i>
                     </a>
                 </div>

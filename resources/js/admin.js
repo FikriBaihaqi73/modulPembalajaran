@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Dropdown functionality
+    /*
     const profileDropdownToggle = document.getElementById('profileDropdownToggle');
     const profileDropdownMenu = document.getElementById('profileDropdownMenu');
 
@@ -40,4 +41,5 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+    */
 });
