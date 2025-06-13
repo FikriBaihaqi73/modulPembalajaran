@@ -1,6 +1,5 @@
 # PembelajaranApp: Platform Modul Interaktif untuk Santri dan Mentor
 
-![PembelajaranApp Logo Placeholder](https://via.placeholder.com/400x150.png?text=PembelajaranApp)
 
 ## Tentang Aplikasi
 
