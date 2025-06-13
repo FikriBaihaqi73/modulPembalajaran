@@ -14,8 +14,16 @@ use App\Http\Controllers\Mentor\MentorProfileController;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('santri.home');
+})->name('santri.home');
+
+Route::get('/about', function () {
+    return view('santri.about');
+})->name('santri.about');
+
+Route::get('/modules', function () {
+    return view('santri.modul');
+})->name('santri.modules');
 
 // Authentication Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

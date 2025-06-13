@@ -23,7 +23,13 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700 mb-6">
             <div>
                 <p class="font-bold">Kategori Modul:</p>
-                <p>{{ $module->moduleCategory->name ?? 'N/A' }}</p>
+                <p>
+                    @forelse($module->moduleCategory as $category)
+                        <span class="inline-block bg-blue-200 text-blue-800 text-xs px-2 py-1 rounded-full">{{ $category->name }}</span>@if(!$loop->last), @endif
+                    @empty
+                        N/A
+                    @endforelse
+                </p>
             </div>
             <div>
                 <p class="font-bold">Jurusan:</p>

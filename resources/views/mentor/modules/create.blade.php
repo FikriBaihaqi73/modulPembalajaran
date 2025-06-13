@@ -16,21 +16,27 @@
                 @enderror
             </div>
             <div class="mb-4">
-                <label for="module_category_ids" class="block text-gray-700 text-sm font-bold mb-2">Kategori Modul:</label>
-                <select name="module_category_ids[]" id="module_category_ids" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('module_category_ids') border-red-500 @enderror" multiple required>
-                    <option value="">Pilih Kategori Modul</option>
-                    @php
-                        $oldCategories = old('module_category_ids', []);
-                    @endphp
-                    @foreach($moduleCategories as $category)
-                        <option value="{{ $category->id }}" {{ in_array($category->id, $oldCategories) ? 'selected' : '' }}>{{ $category->name }}</option>
-                    @endforeach
-                </select>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Kategori Modul:</label>
+                <div id="module-categories-container">
+                    {{-- Initial category field --}}
+                    <div class="flex items-center mb-2 module-category-item">
+                        <select name="module_category_ids[]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('module_category_ids.0') border-red-500 @enderror" required>
+                            <option value="">Pilih Kategori Modul</option>
+                            @foreach($moduleCategories as $category)
+                                <option value="{{ $category->id }}" {{ old('module_category_ids.0') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        <button type="button" class="ml-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded add-category-btn">
+                            +
+                        </button>
+                    </div>
+                    {{-- Additional category fields will be added here by JavaScript --}}
+                </div>
                 @error('module_category_ids')
-                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    <p class="text-red-500 text-xs italic">Anda harus memilih setidaknya satu kategori modul.</p>
                 @enderror
                 @error('module_category_ids.*')
-                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    <p class="text-red-500 text-xs italic">Isian kategori modul tidak valid.</p>
                 @enderror
             </div>
             <div class="mb-4">

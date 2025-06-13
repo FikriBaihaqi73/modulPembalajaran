@@ -17,21 +17,61 @@
                 @enderror
             </div>
             <div class="mb-4">
-                <label for="module_category_ids" class="block text-gray-700 text-sm font-bold mb-2">Kategori Modul:</label>
-                <select name="module_category_ids[]" id="module_category_ids" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('module_category_ids') border-red-500 @enderror" multiple required>
-                    <option value="">Pilih Kategori Modul</option>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Kategori Modul:</label>
+                <div id="module-categories-container-edit" data-options='<select name="module_category_ids[]">@foreach($moduleCategories as $category)<option value="{{ $category->id }}">{{ $category->name }}</option>@endforeach</select>'>
                     @php
-                        $oldCategories = old('module_category_ids', $module->moduleCategory->pluck('id')->toArray());
+                        // Get old selected categories in case of validation error, otherwise get existing module categories
+                        $selectedCategories = old('module_category_ids', $module->moduleCategory->pluck('id')->toArray());
+                        // Ensure there's at least one category selected if the module has none, for the initial select box
+                        if (empty($selectedCategories) && $moduleCategories->isNotEmpty()) {
+                            $selectedCategories = ['']; // Add an empty option for the default select
+                        } elseif (empty($selectedCategories) && $moduleCategories->isEmpty()) {
+                            $selectedCategories = []; // No categories available at all, leave empty
+                        }
                     @endphp
-                    @foreach($moduleCategories as $category)
-                        <option value="{{ $category->id }}" {{ in_array($category->id, $oldCategories) ? 'selected' : '' }}>{{ $category->name }}</option>
-                    @endforeach
-                </select>
+
+                    @forelse($selectedCategories as $index => $selectedCategoryId)
+                        <div class="flex items-center mb-2 module-category-item">
+                            <select name="module_category_ids[]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('module_category_ids.' . $index) border-red-500 @enderror" required>
+                                <option value="">Pilih Kategori Modul</option>
+                                @foreach($moduleCategories as $category)
+                                    <option value="{{ $category->id }}" {{ $selectedCategoryId == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                            @if($loop->first) {{-- Only the first one gets the add button --}}
+                                <button type="button" class="ml-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded add-category-btn">
+                                    +
+                                </button>
+                            @else {{-- Subsequent ones get a remove button --}}
+                                <button type="button" class="ml-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded remove-category-btn">
+                                    -
+                                </button>
+                            @endif
+                        </div>
+                    @empty
+                        {{-- Fallback if no categories are found or old categories are empty, and moduleCategories is not empty --}}
+                        @if($moduleCategories->isNotEmpty())
+                            <div class="flex items-center mb-2 module-category-item">
+                                <select name="module_category_ids[]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('module_category_ids.0') border-red-500 @enderror" required>
+                                    <option value="">Pilih Kategori Modul</option>
+                                    @foreach($moduleCategories as $category)
+                                        <option value="{{ $category->id }}" {{ old('module_category_ids.0') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                                <button type="button" class="ml-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded add-category-btn">
+                                    +
+                                </button>
+                            </div>
+                        @else
+                            <p class="text-gray-600">Tidak ada kategori modul yang tersedia.</p>
+                        @endif
+                    @endforelse
+                </div>
                 @error('module_category_ids')
-                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    <p class="text-red-500 text-xs italic">Anda harus memilih setidaknya satu kategori modul.</p>
                 @enderror
                 @error('module_category_ids.*')
-                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    <p class="text-red-500 text-xs italic">Isian kategori modul tidak valid.</p>
                 @enderror
             </div>
             <div class="mb-4">

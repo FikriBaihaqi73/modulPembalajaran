@@ -78,6 +78,95 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Dynamic Module Categories (Create/Edit Module Forms)
+    const moduleCategoriesContainer = document.getElementById('module-categories-container');
+    const moduleCategoriesContainerEdit = document.getElementById('module-categories-container-edit');
+
+    // Function to update visibility of remove buttons
+    const updateRemoveButtons = (container) => {
+        const removeButtons = container.querySelectorAll('.remove-category-btn');
+        if (container.children.length <= 1) {
+            removeButtons.forEach(btn => btn.style.display = 'none');
+        } else {
+            removeButtons.forEach(btn => btn.style.display = 'block');
+        }
+    };
+
+    function setupDynamicCategories(containerId, initialCategoriesHtml = '') {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        // Function to create a new category item
+        const createCategoryItem = (selectedValue = '') => {
+            const div = document.createElement('div');
+            div.classList.add('flex', 'items-center', 'mb-2', 'module-category-item');
+
+            const select = document.createElement('select');
+            select.name = 'module_category_ids[]';
+            select.classList.add('shadow', 'appearance-none', 'border', 'rounded', 'w-full', 'py-2', 'px-3', 'text-gray-700', 'leading-tight', 'focus:outline-none', 'focus:shadow-outline');
+            select.required = true;
+
+            // Clone options from an existing select or use provided html
+            let optionsHtml = '<option value="">Pilih Kategori Modul</option>';
+            const existingSelect = container.querySelector('select[name="module_category_ids[]"]');
+            if (existingSelect) {
+                optionsHtml = existingSelect.innerHTML;
+            } else if (initialCategoriesHtml) {
+                // For edit form where categories might be loaded dynamically if container is empty
+                optionsHtml = initialCategoriesHtml; // This will already contain the <option> tags
+            }
+            select.innerHTML = optionsHtml;
+            select.value = selectedValue;
+
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.classList.add('ml-2', 'bg-red-500', 'hover:bg-red-600', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'remove-category-btn');
+            removeButton.textContent = '-';
+
+            div.appendChild(select);
+            div.appendChild(removeButton);
+
+            return div;
+        };
+
+        // Event listener for adding new category fields (on the add button)
+        container.addEventListener('click', function (event) {
+            if (event.target.classList.contains('add-category-btn')) {
+                const newCategoryItem = createCategoryItem();
+                container.appendChild(newCategoryItem);
+                updateRemoveButtons(container); // Update visibility after adding
+            } else if (event.target.classList.contains('remove-category-btn')) {
+                if (container.children.length > 1) { // Ensure at least one field remains
+                    event.target.parentNode.remove();
+                    updateRemoveButtons(container); // Update visibility after removing
+                }
+            }
+        });
+
+        // For edit form, if no items are pre-filled by Blade (e.g., old() returns empty, module has no categories),
+        // we add one empty item for user to start with.
+        if (container.id === 'module-categories-container-edit' && container.children.length === 0) {
+            // Get options from the data-options attribute set in Blade
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = container.dataset.options; // This will be the <select> element with all options
+            const optionsOnly = tempDiv.querySelector('select').innerHTML;
+            const newCategoryItem = createCategoryItem('', optionsOnly); // Pass options to new item
+            container.appendChild(newCategoryItem);
+        }
+        updateRemoveButtons(container); // Initial update on load
+    }
+
+    if (moduleCategoriesContainer) {
+        setupDynamicCategories('module-categories-container');
+    }
+    if (moduleCategoriesContainerEdit) {
+        // For edit form, the Blade loop already populates initial categories.
+        // We just need to attach event listeners and ensure initial state is correct.
+        // The `dataset.options` in edit.blade.php should contain all category options for new dynamic selects.
+        const optionsHtmlForNewSelects = moduleCategoriesContainerEdit.dataset.options;
+        setupDynamicCategories('module-categories-container-edit', optionsHtmlForNewSelects);
+    }
+
     // Tiptap Editor Initialization
     const editorRoot = document.getElementById('tiptap-editor');
     const hiddenInput = document.getElementById('content-hidden');
