@@ -36,6 +36,19 @@
                     </select>
                 </div>
 
+                @if($isAdmin)
+                <div class="md:w-56">
+                    <label for="major_id" class="sr-only">Jurusan</label>
+                    <select id="major_id" name="major_id"
+                        class="focus:ring-blue-500 focus:border-blue-500 block w-full py-2 px-3 border border-gray-300 rounded-md text-sm">
+                        <option value="">Semua Jurusan</option>
+                        @foreach($majors as $major)
+                            <option value="{{ $major->id }}" {{ request('major_id') == $major->id ? 'selected' : '' }}>{{ $major->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                @endif
+
                 <div class="flex space-x-2">
                     <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,7 +56,7 @@
                         </svg>
                         Filter
                     </button>
-                    @if(request('search') || request('module_category_id'))
+                    @if(request('search') || request('module_category_id') || ($isAdmin && request('major_id')))
                         <a href="{{ route('santri.modules.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

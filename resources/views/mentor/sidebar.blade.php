@@ -16,6 +16,13 @@
     </div>
 
     <nav class="mt-6 px-4">
+        <a class="flex items-center py-3 px-4 rounded-lg text-gray-100 hover:bg-blue-700 hover:bg-opacity-50 hover:text-white group mb-3 transition-all" href="{{ url('/') }}">
+            <svg class="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 9L12 2L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M9 13V17H15V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <span class="mx-3 text-sm font-medium transition-opacity duration-300 opacity-100 whitespace-nowrap overflow-hidden group-[.sidebar-collapsed-text]:opacity-0">Beranda</span>
+        </a>
         <a class="flex items-center py-3 px-4 rounded-lg text-gray-100 hover:bg-blue-700 hover:bg-opacity-50 hover:text-white group mb-3 transition-all" href="{{ url('/mentor/dashboard') }}">
             <svg class="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3 12H12M12 12V3M12 12V21M21 12H12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>

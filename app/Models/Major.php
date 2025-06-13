@@ -16,4 +16,12 @@ class Major extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    /**
+     * Get the modules for the major.
+     */
+    public function modules(): HasMany
+    {
+        return $this->hasMany(Module::class);
+    }
 }

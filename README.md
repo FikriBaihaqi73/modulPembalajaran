@@ -1,66 +1,101 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PembelajaranApp: Platform Modul Interaktif untuk Santri dan Mentor
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![PembelajaranApp Logo Placeholder](https://via.placeholder.com/400x150.png?text=PembelajaranApp)
 
-## About Laravel
+## Tentang Aplikasi
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+PembelajaranApp adalah platform edukasi interaktif yang dirancang untuk memfasilitasi manajemen dan akses modul pembelajaran bagi santri dan mentor. Aplikasi ini memungkinkan mentor untuk membuat dan mengelola modul pembelajaran sesuai dengan jurusan mereka, sementara santri dapat dengan mudah menjelajahi, membaca, dan mengunduh modul untuk akses offline. Admin memiliki visibilitas penuh atas seluruh aktivitas dan data di platform.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Untuk Santri:
+-   **Jelajahi Modul:** Akses daftar modul pembelajaran yang komprehensif.
+-   **Filter Modul:** Saring modul berdasarkan kategori dan, jika admin login, berdasarkan jurusan.
+-   **Akses Offline:** Unduh modul dalam format PDF atau kategori modul dalam format ZIP untuk dibaca kapan saja, di mana saja.
+-   **Profil Pengguna:** Kelola detail profil pribadi dan kata sandi.
 
-## Learning Laravel
+### Untuk Mentor:
+-   **Manajemen Modul:** Buat, edit, lihat, dan kelola modul pembelajaran yang terkait dengan jurusan spesifik mentor.
+-   **Manajemen Kategori Modul:** Atur kategori untuk modul mereka.
+-   **Manajemen Santri:** Kelola data santri yang terkait dengan jurusan mereka.
+-   **Pengunggahan Konten Kaya:** Gunakan editor Tiptap dengan kemampuan pengunggahan gambar dan pratinjau video YouTube yang dapat diubah ukurannya.
+-   **Kontrol Visibilitas Modul:** Tentukan apakah modul terlihat oleh santri atau tidak.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Untuk Admin:
+-   **Dasbor Komprehensif:** Lihat ringkasan total santri, total mentor, dan jumlah modul per jurusan.
+-   **Manajemen Santri:** Lihat dan kelola data santri.
+-   **Manajemen Mentor:** Lihat dan kelola data mentor.
+-   **Pemantauan Modul:** Lihat semua modul dari berbagai jurusan dengan opsi filter.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Teknologi yang Digunakan
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   **Backend:** Laravel (PHP Framework)
+-   **Frontend:** Blade (Templating Engine), JavaScript (dengan React untuk editor Tiptap)
+-   **Database:** MySQL (atau database relasional lainnya yang didukung Laravel)
+-   **Editor Konten:** Tiptap (dengan ekstensi kustom untuk YouTube resizable)
+-   **Ikon:** Font Awesome
+-   **Styling:** Tailwind CSS
+-   **Penyimpanan Media:** Cloudinary (untuk thumbnail modul)
 
-## Laravel Sponsors
+## Instalasi dan Setup
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Untuk menjalankan aplikasi ini di lingkungan lokal Anda, ikuti langkah-langkah berikut:
 
-### Premium Partners
+1.  **Clone Repository:**
+    ```bash
+    git clone <URL_REPOSITORY_ANDA>
+    cd PembelajaranApp
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+2.  **Instal Dependensi Composer:**
+    ```bash
+    composer install
+    ```
 
-## Contributing
+3.  **Instal Dependensi Node.js:**
+    ```bash
+    npm install
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4.  **Konfigurasi Environment (.env):**
+    -   Salin file `.env.example` ke `.env`:
+        ```bash
+        cp .env.example .env
+        ```
+    -   Generate kunci aplikasi:
+        ```bash
+        php artisan key:generate
+        ```
+    -   Konfigurasi detail database Anda di file `.env`.
+    -   Tambahkan kredensial Cloudinary Anda di file `.env` untuk pengunggahan thumbnail modul (jika digunakan).
 
-## Code of Conduct
+5.  **Jalankan Migrasi Database dan Seeder:**
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
+    Ini akan membuat tabel database dan mengisi data awal (termasuk peran pengguna dan jurusan).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6.  **Kompilasi Aset Frontend:**
+    ```bash
+    npm run dev
+    ```
+    Atau untuk produksi:
+    ```bash
+    npm run build
+    ```
 
-## Security Vulnerabilities
+7.  **Jalankan Server Lokal:**
+    ```bash
+    php artisan serve
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+8.  **Akses Aplikasi:**
+    Buka browser Anda dan kunjungi `http://127.0.0.1:8000` (atau alamat yang ditampilkan oleh `php artisan serve`).
 
-## License
+## Kontribusi
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Kami menyambut kontribusi! Jika Anda ingin berkontribusi, silakan fork repository dan buat pull request dengan fitur atau perbaikan Anda. Pastikan untuk mengikuti pedoman kontribusi yang ada.
+
+## Lisensi
+
+Aplikasi ini dilisensikan di bawah Lisensi MIT. Lihat file `LICENSE` untuk detail lebih lanjut.

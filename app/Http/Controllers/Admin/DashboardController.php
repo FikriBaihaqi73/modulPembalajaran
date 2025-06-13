@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Major;
+use App\Models\Module;
 use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
@@ -17,6 +19,9 @@ class DashboardController extends Controller
         $totalSantri = $santriRole ? User::where('role_id', $santriRole->id)->count() : 0;
         $totalMentor = $mentorRole ? User::where('role_id', $mentorRole->id)->count() : 0;
 
-        return view('admin.dashboard.index', compact('totalSantri', 'totalMentor'));
+        // Get module counts per major
+        $modulesPerMajor = Major::withCount('modules')->get();
+
+        return view('admin.dashboard.index', compact('totalSantri', 'totalMentor', 'modulesPerMajor'));
     }
 }
