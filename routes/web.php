@@ -11,6 +11,8 @@ use App\Http\Controllers\Mentor\ModuleCategoryController as MentorModuleCategory
 use App\Http\Controllers\Mentor\ModuleController as MentorModuleController;
 use App\Http\Controllers\Mentor\SantriController as MentorSantriController;
 use App\Http\Controllers\Mentor\MentorProfileController;
+use App\Http\Controllers\Frontend\ModuleController as FrontendModuleController;
+use App\Http\Controllers\Frontend\SantriProfileController;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -21,9 +23,9 @@ Route::get('/about', function () {
     return view('santri.about');
 })->name('santri.about');
 
-Route::get('/modules', function () {
-    return view('santri.modul');
-})->name('santri.modules');
+// Route::get('/modules', function () {
+//     return view('santri.modul');
+// })->name('santri.modules');
 
 // Authentication Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -56,5 +58,15 @@ Route::middleware(['auth'])->prefix('mentor')->name('mentor.')->group(function (
     Route::resource('/module-categories', MentorModuleCategoryController::class)->names('module-categories');
     Route::resource('/modules', MentorModuleController::class)->names('modules');
     Route::post('/modules/upload-image', [MentorModuleController::class, 'uploadImage'])->name('modules.uploadImage');
+    Route::post('/modules/{module}/toggle-visibility', [MentorModuleController::class, 'toggleVisibility'])->name('modules.toggleVisibility');
     Route::resource('/santri', MentorSantriController::class)->names('santri');
+});
+
+// Santri Routes
+Route::prefix('santri')->name('santri.')->group(function () {
+    Route::get('/modules', [FrontendModuleController::class, 'index'])->name('modules.index');
+    Route::get('/modules/{module}', [FrontendModuleController::class, 'show'])->name('modules.show');
+    Route::get('/profile', [SantriProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/update-details', [SantriProfileController::class, 'updateDetails'])->name('profile.updateDetails');
+    Route::post('/profile/update-password', [SantriProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 });

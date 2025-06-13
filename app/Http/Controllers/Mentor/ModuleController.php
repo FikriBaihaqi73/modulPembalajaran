@@ -289,48 +289,24 @@ class ModuleController extends Controller
         $mentor = Auth::user();
         $module = Module::where('user_id', $mentor->id)->findOrFail($id);
 
-        try {
-            $config = new Configuration();
-            $config->cloud->cloudName = env('CLOUDINARY_CLOUD_NAME');
-            $config->cloud->apiKey = env('CLOUDINARY_API_KEY');
-            $config->cloud->apiSecret = env('CLOUDINARY_API_SECRET');
-            $config->url->secure = true;
-
-            $cloudinaryDelete = new Cloudinary($config);
-
-            // Delete thumbnail from Cloudinary if it exists
-            if ($module->thumbnail) {
-                $publicId = $this->extractCloudinaryPublicId($module->thumbnail, 'module_thumbnails');
-                if ($publicId) {
-                    $cloudinaryDelete->uploadApi()->destroy($publicId);
-                    Log::info('Thumbnail deleted from Cloudinary on module destroy:', ['public_id' => $publicId]);
-                }
-            }
-
-            // Delete images from Tiptap content if they exist
-            if ($module->content) {
-                $imageUrls = $this->extractCloudinaryImageUrls($module->content);
-                foreach ($imageUrls as $url) {
-                    $publicId = $this->extractCloudinaryPublicId($url, 'tiptap_images');
-                    if ($publicId) {
-                        $cloudinaryDelete->uploadApi()->destroy($publicId);
-                        Log::info('Tiptap image deleted from Cloudinary on module destroy:', ['public_id' => $publicId]);
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            Log::error('Failed to delete Cloudinary assets on module destroy:', [
-                'module_id' => $module->id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-            // Optionally, you might want to stop deletion here if Cloudinary deletion is critical
-            // return redirect()->back()->with('error', 'Failed to delete associated images.');
-        }
+        // No Cloudinary deletion logic here as per user's previous request
 
         $module->delete();
 
         return redirect()->route('mentor.modules.index')->with('success', 'Modul berhasil dihapus.');
+    }
+
+    /**
+     * Toggle the visibility of the specified module.
+     */
+    public function toggleVisibility(string $id)
+    {
+        $mentor = Auth::user();
+        $module = Module::where('user_id', $mentor->id)->findOrFail($id);
+        $module->is_visible = !$module->is_visible;
+        $module->save();
+
+        return redirect()->route('mentor.modules.index')->with('success', 'Status visibilitas modul berhasil diperbarui.');
     }
 
     /**

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->longText('content')->nullable();
             $table->string('thumbnail')->nullable();
+            $table->boolean('is_visible')->default(true);
             $table->foreignId('major_id')->constrained('majors')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();

@@ -10,6 +10,7 @@ class Module extends Model
         'name',
         'content',
         'thumbnail',
+        'is_visible',
         'major_id',
         'user_id',
     ];

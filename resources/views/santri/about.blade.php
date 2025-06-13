@@ -3,48 +3,124 @@
 @section('title', 'About Us')
 
 @section('content')
-    <div class="px-8 py-4">
-        <h1 class="text-4xl font-bold text-gray-800 mb-6 text-center">About</h1>
-        <p class="mt-4 text-lg text-gray-600 leading-relaxed mb-12 text-center">
-            Aplikasi ini dibangun untuk mengatasi berbagai tantangan dalam pengelolaan modul pembelajaran di Pondok IT.
-            Berikut adalah beberapa permasalahan utama yang ingin saya selesaikan:
-        </p>
+    {{-- Header Section --}}
+    <div class="max-w-5xl mx-auto mb-12">
+        <div class="text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Tentang Aplikasi</h1>
+            <div class="h-1 w-24 bg-blue-600 mx-auto mb-6 rounded-full"></div>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Aplikasi ini dibangun untuk mengatasi berbagai tantangan dalam pengelolaan modul pembelajaran di Pondok IT.
+                Berikut adalah beberapa permasalahan utama yang ingin kami selesaikan:
+            </p>
+        </div>
+    </div>
 
+    {{-- Problems Grid --}}
+    <div class="max-w-6xl mx-auto mb-16">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {{-- Problem 1: Sistem Pengelolaan yang Tidak Terstruktur --}}
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                <div class="text-indigo-600 mb-4">
-                    <i class="fas fa-folder-open fa-3x"></i> {{-- Updated icon --}}
+            {{-- Problem 1 --}}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-all hover:-translate-y-1 hover:shadow-xl">
+                <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-4">
+                    <div class="bg-white bg-opacity-20 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Pengelolaan Tidak Terstruktur</h3>
                 </div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-2">Pengelolaan Tidak Terstruktur</h3>
-                <p class="text-gray-600">Modul pembelajaran tersebar dan sulit diorganisir, menghambat akses dan efisiensi.</p>
+                <div class="p-6">
+                    <p class="text-gray-600">
+                        Modul pembelajaran sebelumnya tersebar di berbagai tempat dan sulit diorganisir dengan baik. Hal ini membuat akses terhadap materi menjadi tidak efisien, meningkatkan kemungkinan kehilangan data, dan memperlambat proses belajar mengajar.
+                    </p>
+                    <div class="mt-4 flex items-center text-sm text-blue-600 font-medium">
+                        <span>Solusi: Repositori terpusat</span>
+                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
             </div>
 
-            {{-- Problem 2: Kesulitan dalam Melakukan Perubahan --}}
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                <div class="text-green-600 mb-4">
-                    <i class="fas fa-sync-alt fa-3x"></i> {{-- Updated icon --}}
+            {{-- Problem 2 --}}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-all hover:-translate-y-1 hover:shadow-xl">
+                <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4">
+                    <div class="bg-white bg-opacity-20 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Proses Pembaruan Rumit</h3>
                 </div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-2">Proses Pembaruan Rumit</h3>
-                <p class="text-gray-600">Revisi materi membutuhkan waktu lama dan proses yang berbelit-belit.</p>
+                <div class="p-6">
+                    <p class="text-gray-600">
+                        Revisi materi pembelajaran membutuhkan waktu lama dan proses yang berbelit-belit. Mentor harus melalui beberapa tahapan yang tidak efisien untuk memperbarui materi, yang berakibat pada lambatnya pembaruan konten untuk mengikuti perkembangan teknologi.
+                    </p>
+                    <div class="mt-4 flex items-center text-sm text-green-600 font-medium">
+                        <span>Solusi: Sistem pembaruan langsung</span>
+                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
             </div>
 
-            {{-- Problem 3: Kurangnya Koordinasi Antar Pengajar --}}
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                <div class="text-purple-600 mb-4">
-                    <i class="fas fa-handshake fa-3x"></i> {{-- Updated icon --}}
+            {{-- Problem 3 --}}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-all hover:-translate-y-1 hover:shadow-xl">
+                <div class="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
+                    <div class="bg-white bg-opacity-20 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Koordinasi Kurang Optimal</h3>
                 </div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-2">Koordinasi Kurang Optimal</h3>
-                <p class="text-gray-600">Tidak ada platform terpusat untuk kolaborasi antar Mentor dalam penyusunan materi.</p>
+                <div class="p-6">
+                    <p class="text-gray-600">
+                        Kurangnya platform terpusat menyebabkan koordinasi antar Mentor dalam penyusunan materi menjadi tidak optimal. Hal ini berpotensi menyebabkan duplikasi materi, kesenjangan pengetahuan, dan standar kualitas yang tidak konsisten.
+                    </p>
+                    <div class="mt-4 flex items-center text-sm text-purple-600 font-medium">
+                        <span>Solusi: Platform kolaborasi terintegrasi</span>
+                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
             </div>
 
-            {{-- Problem 4: Akses Terbatas untuk Santri --}}
-            <div class="bg-white rounded-lg shadow-lg p-6 text-center transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                <div class="text-red-600 mb-4">
-                    <i class="fas fa-user-lock fa-3x"></i> {{-- Updated icon --}}
+            {{-- Problem 4 --}}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-all hover:-translate-y-1 hover:shadow-xl">
+                <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4">
+                    <div class="bg-white bg-opacity-20 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Akses Santri Terbatas</h3>
                 </div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-2">Akses Santri Terbatas</h3>
-                <p class="text-gray-600">Santri kesulitan mendapatkan akses ke materi pembelajaran terbaru dan terorganisir.</p>
+                <div class="p-6">
+                    <p class="text-gray-600">
+                        Santri mengalami kesulitan dalam mendapatkan akses ke materi pembelajaran terbaru dan terorganisir. Keterbatasan ini membatasi potensi pembelajaran mandiri dan menghambat perkembangan keterampilan santri dalam mengikuti perkembangan teknologi.
+                    </p>
+                    <div class="mt-4 flex items-center text-sm text-red-600 font-medium">
+                        <span>Solusi: Sistem akses terpadu dan terverifikasi</span>
+                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Vision Section --}}
+    <div class="bg-blue-50 rounded-xl py-12 px-4 sm:px-6 mb-16">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">Visi Kami</h2>
+            <p class="text-lg text-gray-700 mb-8">
+                Menciptakan ekosistem pembelajaran yang terintegrasi, terstruktur, dan mudah diakses untuk meningkatkan kualitas pendidikan di Pondok IT dan mempersiapkan santri dalam menghadapi tantangan teknologi masa depan.
+            </p>
+            <div class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700">
+                Mari Bersama Membangun Pendidikan IT Berkualitas
             </div>
         </div>
     </div>

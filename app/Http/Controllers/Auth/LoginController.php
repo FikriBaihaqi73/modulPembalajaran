@@ -58,6 +58,8 @@ class LoginController extends Controller
                 return redirect()->intended('/admin/dashboard');
             } elseif (Auth::user()->role->name === 'Mentor') {
                 return redirect()->intended('/mentor/dashboard');
+            } elseif (Auth::user()->role->name === 'Santri') {
+                return redirect()->intended(route('santri.modules.index'));
             } else {
                 return redirect()->intended($this->redirectTo);
             }
