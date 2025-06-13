@@ -43,4 +43,46 @@
             </div>
         </div>
     </div>
+
+    <div class="mt-6">
+        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Jumlah Modul per Jurusan</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @forelse($modulesPerMajor as $major)
+                <div class="bg-white overflow-hidden shadow-md rounded-lg p-5">
+                    <div class="flex items-center">
+                        <div class="p-4 rounded-full bg-purple-600 bg-opacity-75 text-white flex items-center justify-center">
+                            {{-- Dynamic icon based on major name --}}
+                            @php
+                                $iconClass = '';
+                                switch (strtolower($major->name)) {
+                                    case 'programmer':
+                                        $iconClass = 'fas fa-laptop-code';
+                                        break;
+                                    case 'multimedia':
+                                        $iconClass = 'fas fa-photo-video';
+                                        break;
+                                    case 'marketer':
+                                        $iconClass = 'fas fa-bullhorn';
+                                        break;
+                                    default:
+                                        $iconClass = 'fas fa-book'; // Default icon
+                                        break;
+                                }
+                            @endphp
+                            <i class="{{ $iconClass }} text-3xl"></i>
+                        </div>
+                        <div class="mx-5">
+                            <h4 class="text-2xl font-bold text-gray-700">{{ $major->modules_count }}</h4>
+                            <div class="text-gray-500">Modul {{ $major->name }}</div>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full text-center text-gray-500">
+                    Tidak ada data modul per jurusan.
+                </div>
+            @endforelse
+        </div>
+    </div>
+</div>
 @endsection

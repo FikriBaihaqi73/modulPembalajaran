@@ -6,13 +6,22 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Module;
 use App\Models\ModuleCategory;
+use App\Models\Major;
 use Illuminate\Support\Facades\Auth;
 
 class ModuleController extends Controller
 {
     public function index(Request $request)
     {
-        if (!Auth::check()) {
+        $isAdmin = false;
+        $majors = collect();
+
+        if (Auth::check()) {
+            if (Auth::user()->role->name === 'Admin') {
+                $isAdmin = true;
+                $majors = Major::all();
+            }
+        } else {
             return view('santri.modules.guest_index');
         }
 
@@ -35,10 +44,16 @@ class ModuleController extends Controller
             });
         }
 
-        $modules = $query->paginate(12); // Paginate for better performance
-        $moduleCategories = ModuleCategory::all(); // Get all categories for filter dropdown
+        // Apply major filter if user is admin and major_id is provided
+        if ($isAdmin && $request->has('major_id') && $request->input('major_id') != '') {
+            $majorId = $request->input('major_id');
+            $query->where('major_id', $majorId);
+        }
 
-        return view('santri.modules.index', compact('modules', 'moduleCategories'));
+        $modules = $query->paginate(12);
+        $moduleCategories = ModuleCategory::all();
+
+        return view('santri.modules.index', compact('modules', 'moduleCategories', 'isAdmin', 'majors'));
     }
 
     /**

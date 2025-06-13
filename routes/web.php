@@ -48,6 +48,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::resource('/santri', SantriController::class)->names('santri');
     Route::resource('/mentor', MentorController::class)->names('mentor');
+    Route::get('/modules', [\App\Http\Controllers\Admin\ModuleController::class, 'index'])->name('modules.index');
+    Route::get('/modules/{module}', [\App\Http\Controllers\Admin\ModuleController::class, 'show'])->name('modules.show');
 });
 
 // Mentor Routes
