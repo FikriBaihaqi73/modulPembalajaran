@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Platform modul pembelajaran untuk Santri Pondok IT">
     <title>@yield('title', 'Modul Pembelajaran Santri Pondok IT')</title>
-    <link rel="icon" href="{{ asset('android-chrome-512x512.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
