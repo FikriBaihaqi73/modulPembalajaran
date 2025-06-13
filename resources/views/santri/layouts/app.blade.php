@@ -64,10 +64,10 @@
             <div class="border-t border-gray-800 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-sm text-gray-500">&copy; {{ date('Y') }} Modul Pembelajaran Santri Pondok IT. All rights reserved.</p>
                 <div class="flex space-x-4 mt-4 md:mt-0">
-                    <a href="https://www.instagram.com/pondokitofficial/" class="text-gray-400 hover:text-white transition-colors">
+                    <a href="https://www.instagram.com/pondokitofficial/" target="_blank" class="text-gray-400 hover:text-white transition-colors">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a href="https://www.facebook.com/pondokit?locale=id_ID" class="text-gray-400 hover:text-white transition-colors">
+                    <a href="https://www.facebook.com/pondokit?locale=id_ID" target="_blank" class="text-gray-400 hover:text-white transition-colors">
                         <i class="fab fa-facebook"></i>
                     </a>
                 </div>
