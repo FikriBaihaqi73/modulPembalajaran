@@ -4,21 +4,23 @@
 
 @section('content')
     <h2 class="text-3xl font-semibold text-gray-800">Manajemen Modul Pembelajaran</h2>
-    <div class="mt-4 mb-4 flex justify-between items-center">
+    <div class="mt-4 mb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <a href="{{ route('mentor.modules.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded">Tambah Modul</a>
 
-        <form action="{{ route('mentor.modules.index') }}" method="GET" class="flex items-center space-x-4">
-            <input type="text" name="search" placeholder="Cari Modul..." value="{{ request('search') }}" class="border rounded px-3 py-2">
-            <select name="module_category_id" class="border rounded px-3 py-2">
+        <form action="{{ route('mentor.modules.index') }}" method="GET" class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
+            <input type="text" name="search" placeholder="Cari Modul..." value="{{ request('search') }}" class="border rounded px-3 py-2 w-full sm:w-auto">
+            <select name="module_category_id" class="border rounded px-3 py-2 w-full sm:w-auto">
                 <option value="">Semua Kategori</option>
                 @foreach($moduleCategories as $category)
                     <option value="{{ $category->id }}" {{ request('module_category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                 @endforeach
             </select>
-            <button type="submit" class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Cari & Filter</button>
-            @if(request('search') || request('module_category_id'))
-                <a href="{{ route('mentor.modules.index') }}" class="text-red-600">Reset</a>
-            @endif
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+                <button type="submit" class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Cari & Filter</button>
+                @if(request('search') || request('module_category_id'))
+                    <a href="{{ route('mentor.modules.index') }}" class="text-red-600">Reset</a>
+                @endif
+            </div>
         </form>
     </div>
     <div class="overflow-x-auto">

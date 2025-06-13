@@ -4,15 +4,17 @@
 
 @section('content')
     <h2 class="text-3xl font-semibold text-gray-800">Manajemen Santri Jurusan Anda</h2>
-    <div class="mt-4 mb-4 flex justify-between items-center">
+    <div class="mt-4 mb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <a href="{{ route('mentor.santri.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded">Tambah Santri</a>
 
-        <form action="{{ route('mentor.santri.index') }}" method="GET" class="flex items-center space-x-4">
-            <input type="text" name="search" placeholder="Cari Santri..." value="{{ request('search') }}" class="border rounded px-3 py-2">
-            <button type="submit" class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Cari</button>
-            @if(request('search'))
-                <a href="{{ route('mentor.santri.index') }}" class="text-red-600">Reset</a>
-            @endif
+        <form action="{{ route('mentor.santri.index') }}" method="GET" class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
+            <input type="text" name="search" placeholder="Cari Santri..." value="{{ request('search') }}" class="border rounded px-3 py-2 w-full sm:w-auto">
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+                <button type="submit" class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Cari</button>
+                @if(request('search'))
+                    <a href="{{ route('mentor.santri.index') }}" class="text-red-600">Reset</a>
+                @endif
+            </div>
         </form>
     </div>
     <div class="overflow-x-auto">
