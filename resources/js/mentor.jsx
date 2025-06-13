@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Dropdown functionality (assuming similar profile dropdown to admin)
+    /*
     const profileDropdownToggle = document.getElementById('profileDropdownToggle');
     const profileDropdownMenu = document.getElementById('profileDropdownMenu');
 
@@ -77,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+    */
 
     // Dynamic Module Categories (Create/Edit Module Forms)
     const moduleCategoriesContainer = document.getElementById('module-categories-container');
