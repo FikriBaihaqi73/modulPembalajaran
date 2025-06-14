@@ -305,11 +305,45 @@ class ModuleController extends Controller
         $mentor = Auth::user();
         $module = Module::where('user_id', $mentor->id)->findOrFail($id);
 
-        // No Cloudinary deletion logic here as per user's previous request
+        try {
+            // Delete thumbnail from Cloudinary if it exists
+            if ($module->thumbnail) {
+                $config = new Configuration();
+                $config->cloud->cloudName = env('CLOUDINARY_CLOUD_NAME');
+                $config->cloud->apiKey = env('CLOUDINARY_API_KEY');
+                $config->cloud->apiSecret = env('CLOUDINARY_API_SECRET');
+                $config->url->secure = true;
 
-        $module->delete();
+                $cloudinaryDelete = new Cloudinary($config);
 
-        return redirect()->route('mentor.modules.index')->with('success', 'Modul berhasil dihapus.');
+                $publicId = $this->extractCloudinaryPublicId($module->thumbnail, 'module_thumbnails');
+                if ($publicId) {
+                    $cloudinaryDelete->uploadApi()->destroy($publicId);
+                    Log::info('Thumbnail deleted from Cloudinary on module deletion:', ['public_id' => $publicId]);
+                }
+            }
+
+            // Also delete any images embedded in the module content from Cloudinary
+            $embeddedImageUrls = $this->extractCloudinaryImageUrls($module->content);
+            foreach ($embeddedImageUrls as $imageUrl) {
+                $publicId = $this->extractCloudinaryPublicId($imageUrl, 'tiptap_images'); // Assuming 'tiptap_images' is the folder for embedded images
+                if ($publicId) {
+                    $cloudinaryDelete->uploadApi()->destroy($publicId);
+                    Log::info('Embedded image deleted from Cloudinary on module deletion:', ['public_id' => $publicId]);
+                }
+            }
+
+            $module->delete();
+
+            return redirect()->route('mentor.modules.index')->with('success', 'Modul berhasil dihapus.');
+        } catch (\Exception $e) {
+            Log::error('Failed to delete module or Cloudinary assets:', [
+                'module_id' => $id,
+                'exception' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return redirect()->back()->with('error', 'Gagal menghapus modul: ' . $e->getMessage());
+        }
     }
 
     /**
