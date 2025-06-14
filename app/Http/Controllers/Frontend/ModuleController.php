@@ -65,7 +65,7 @@ class ModuleController extends Controller
     public function show(string $id)
     {
         // Ensure the module is visible and exists
-        $module = Module::with(['major', 'moduleCategory', 'reviews.user'])
+        $module = Module::with(['major', 'moduleCategory', 'reviews.user', 'reviews.replies.user'])
                         ->where('is_visible', true)
                         ->findOrFail($id);
 
@@ -165,5 +165,26 @@ class ModuleController extends Controller
         $review->save();
 
         return redirect()->back()->with('success', 'Ulasan Anda berhasil diperbarui!');
+    }
+
+    /**
+     * Remove the specified module review from storage.
+     */
+    public function destroyReview(Module $module, ModuleReview $review)
+    {
+        if (!Auth::check()) {
+            return redirect()->back()->with('error', 'Anda harus login untuk menghapus ulasan.');
+        }
+
+        $user = Auth::user();
+
+        // Ensure the authenticated user owns this review
+        if ($review->user_id !== $user->id) {
+            return redirect()->back()->with('error', 'Anda tidak diizinkan untuk menghapus ulasan ini.');
+        }
+
+        $review->delete();
+
+        return redirect()->back()->with('success', 'Ulasan Anda berhasil dihapus!');
     }
 }

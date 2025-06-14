@@ -27,7 +27,7 @@ class ModuleProgressController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $module->load(['progress.user', 'user', 'major', 'reviews.user']);
+        $module->load(['progress.user', 'user', 'major', 'reviews.user', 'reviews.replies.user']);
 
         $completedCount = $module->progress->where('is_completed', true)->count();
         $notCompletedCount = $module->progress->where('is_completed', false)->count();

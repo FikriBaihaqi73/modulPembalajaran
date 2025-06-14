@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Role;
 use App\Models\Major;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -64,5 +65,13 @@ class User extends Authenticatable
     public function major(): BelongsTo
     {
         return $this->belongsTo(Major::class);
+    }
+
+    /**
+     * Get the review replies for the user.
+     */
+    public function reviewReplies(): HasMany
+    {
+        return $this->hasMany(ReviewReply::class);
     }
 }

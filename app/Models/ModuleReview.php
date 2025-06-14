@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ModuleReview extends Model
 {
@@ -28,5 +29,13 @@ class ModuleReview extends Model
     public function module(): BelongsTo
     {
         return $this->belongsTo(Module::class);
+    }
+
+    /**
+     * Get the replies for the review.
+     */
+    public function replies(): HasMany
+    {
+        return $this->hasMany(ReviewReply::class, 'review_id');
     }
 }
