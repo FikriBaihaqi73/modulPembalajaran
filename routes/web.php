@@ -72,6 +72,8 @@ Route::prefix('santri')->name('santri.')->group(function () {
     Route::get('/modules', [FrontendModuleController::class, 'index'])->name('modules.index');
     Route::get('/modules/{module}', [FrontendModuleController::class, 'show'])->name('modules.show');
     Route::post('/modules/{module}/toggle-completion', [FrontendModuleController::class, 'toggleCompletion'])->name('modules.toggleCompletion');
+    Route::post('/modules/{module}/review', [FrontendModuleController::class, 'storeReview'])->name('modules.storeReview');
+    Route::put('/modules/{module}/review/{review}', [FrontendModuleController::class, 'updateReview'])->name('modules.updateReview');
 
     // New download routes
     Route::get('/modules/{module}/download-pdf', [ModuleDownloadController::class, 'downloadSingleModulePdf'])->name('modules.download.pdf');

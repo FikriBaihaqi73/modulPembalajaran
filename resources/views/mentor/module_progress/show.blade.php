@@ -73,6 +73,51 @@
                 </div>
             @endif
         </div>
+
+        {{-- Reviews Section --}}
+        <div class="bg-white rounded-lg shadow-sm p-6 mt-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Ulasan Modul</h3>
+
+            @if($module->reviews->count() > 0)
+                <div class="flex items-center mb-4">
+                    <div class="flex items-center text-yellow-500 mr-2">
+                        @for ($i = 1; $i <= 5; $i++)
+                            @if ($i <= round($module->average_rating))
+                                <i class="fas fa-star"></i>
+                            @else
+                                <i class="far fa-star"></i>
+                            @endif
+                        @endfor
+                    </div>
+                    <span class="text-gray-700 text-lg font-semibold">{{ number_format($module->average_rating, 1) }} dari 5 ({{ $module->reviews->count() }} ulasan)</span>
+                </div>
+
+                <div class="space-y-6">
+                    @foreach ($module->reviews as $review)
+                        <div class="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200">
+                            <div class="flex items-center mb-2">
+                                <p class="font-semibold text-gray-800 mr-2">{{ $review->user->name ?? 'Pengguna Anonim' }}</p>
+                                <div class="flex items-center text-yellow-500 text-sm">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($i <= $review->rating)
+                                            <i class="fas fa-star"></i>
+                                        @else
+                                            <i class="far fa-star"></i>
+                                        @endif
+                                    @endfor
+                                </div>
+                            </div>
+                            @if ($review->comment)
+                                <p class="text-gray-700 text-sm">{{ $review->comment }}</p>
+                            @endif
+                            <p class="text-xs text-gray-500 mt-2">{{ \Carbon\Carbon::parse($review->created_at)->locale('id')->translatedFormat('d F Y, H:i') }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <p class="text-gray-600">Belum ada ulasan untuk modul ini.</p>
+            @endif
+        </div>
     </div>
 @endsection
 
@@ -116,6 +161,46 @@
                         }
                     }
                 }
+            });
+
+            // Star Rating Logic
+            const starRatingContainer = document.getElementById('star-rating-container');
+            const ratingInput = document.getElementById('rating');
+            const stars = starRatingContainer.querySelectorAll('i');
+
+            let currentRating = parseInt(ratingInput.value) || 0;
+
+            function updateStars(rating) {
+                stars.forEach((star, index) => {
+                    if (index < rating) {
+                        star.classList.remove('far');
+                        star.classList.add('fas', 'text-yellow-500');
+                    } else {
+                        star.classList.remove('fas', 'text-yellow-500');
+                        star.classList.add('far');
+                    }
+                });
+            }
+
+            // Initial star display
+            updateStars(currentRating);
+
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.dataset.rating);
+                    currentRating = rating;
+                    ratingInput.value = rating;
+                    updateStars(rating);
+                });
+
+                star.addEventListener('mouseover', () => {
+                    const rating = parseInt(star.dataset.rating);
+                    updateStars(rating);
+                });
+
+                star.addEventListener('mouseout', () => {
+                    updateStars(currentRating);
+                });
             });
         });
     </script>

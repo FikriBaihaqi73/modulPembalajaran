@@ -20,6 +20,15 @@
                         <div class="p-6">
                             <h3 class="text-xl font-semibold text-gray-800 mb-2 line-clamp-1">{{ $module->name }}</h3>
                             <p class="text-sm text-gray-600 mb-4">Dibuat pada: {{ \Carbon\Carbon::parse($module->created_at)->locale('id')->translatedFormat('d F Y') }}</p>
+                            <div class="flex items-center text-sm text-gray-700 mb-2">
+                                <span class="mr-1">Rating:</span>
+                                @if($module->reviews->count() > 0)
+                                    <span class="font-semibold text-yellow-500">{{ number_format($module->average_rating, 1) }}</span>/5
+                                    <span class="ml-1 text-gray-500">({{ $module->reviews->count() }} ulasan)</span>
+                                @else
+                                    <span class="text-gray-500">Belum ada ulasan</span>
+                                @endif
+                            </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-700">Santri Melacak: <span class="font-semibold">{{ $module->progress->count() }}</span></span>
                                 @php

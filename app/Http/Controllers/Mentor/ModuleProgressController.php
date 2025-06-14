@@ -14,7 +14,7 @@ class ModuleProgressController extends Controller
         $mentorId = Auth::id();
 
         $modules = Module::where('user_id', $mentorId)
-                            ->with(['progress.user'])
+                            ->with(['progress.user', 'reviews', 'reviews.user'])
                             ->get();
 
         return view('mentor.module_progress.index', compact('modules'));
@@ -27,7 +27,7 @@ class ModuleProgressController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $module->load(['progress.user', 'user', 'major']);
+        $module->load(['progress.user', 'user', 'major', 'reviews.user']);
 
         $completedCount = $module->progress->where('is_completed', true)->count();
         $notCompletedCount = $module->progress->where('is_completed', false)->count();

@@ -39,6 +39,22 @@ class Module extends Model
     }
 
     /**
+     * Get the reviews for the module.
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ModuleReview::class);
+    }
+
+    /**
+     * Get the average rating for the module.
+     */
+    public function getAverageRatingAttribute(): ?float
+    {
+        return $this->reviews->avg('rating');
+    }
+
+    /**
      * Get the module progress records for the module.
      */
     public function progress(): HasMany
