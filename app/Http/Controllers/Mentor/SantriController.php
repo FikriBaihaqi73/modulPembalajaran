@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\NewUserRegistered;
 
 class SantriController extends Controller
 {
@@ -58,13 +59,22 @@ class SantriController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
-        User::create([
+        $newSantri = User::create([
             'username' => $request->username,
             'name' => $request->name,
             'password' => bcrypt($request->password),
             'role_id' => $santriRole->id,
             'major_id' => $mentor->major_id, // Auto-assign mentor's major
         ]);
+
+        // Notify all admins about the new santri
+        $admins = User::whereHas('role', function ($query) {
+            $query->where('name', 'Admin');
+        })->get();
+
+        foreach ($admins as $admin) {
+            $admin->notify(new NewUserRegistered($newSantri));
+        }
 
         return redirect()->route('mentor.santri.index')->with('success', 'Santri berhasil ditambahkan.');
     }

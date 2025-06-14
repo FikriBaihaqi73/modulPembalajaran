@@ -44,7 +44,7 @@
                             <div class="flex items-start">
                                 <div class="flex-shrink-0 pt-0.5">
                                     <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                                        <i class="fas {{ $notification->type === 'App\\Notifications\\ReviewReplied' ? 'fa-comment-dots' : 'fa-bell' }}"></i>
+                                        <i class="fas {{ $notification->type === 'App\\Notifications\\ReviewReplied' ? 'fa-comment-dots' : ($notification->type === 'App\\Notifications\\NewAnnouncement' ? 'fa-bullhorn' : 'fa-bell') }}"></i>
                                     </div>
                                 </div>
                                 <div class="ml-4 flex-1">
@@ -53,6 +53,15 @@
                                             @if ($notification->type === 'App\\Notifications\\ReviewReplied')
                                                 <p class="font-medium text-gray-900">Balasan Baru</p>
                                                 <p class="text-gray-700 text-sm mt-1">Ulasan Anda pada modul <a href="{{ $notification->data['link'] }}" class="text-blue-600 hover:underline font-medium">{{ $notification->data['module_name'] }}</a> telah dibalas oleh {{ $notification->data['replier_name'] ?? 'Sistem' }}.</p>
+                                            @elseif ($notification->type === 'App\\Notifications\\NewAnnouncement')
+                                                <p class="font-medium text-gray-900">{{ $notification->data['title'] ?? 'Pengumuman Baru' }}</p>
+                                                <p class="text-gray-700 text-sm mt-1">
+                                                    {{ $notification->data['message'] ?? 'Ada pengumuman baru dari ' . ($notification->data['sender'] ?? 'Sistem') . '.' }}
+                                                </p>
+                                                <p class="text-xs text-gray-500 mt-2 flex items-center">
+                                                    <i class="fas fa-user mr-1"></i>
+                                                    Oleh: {{ $notification->data['sender'] ?? 'Sistem' }}
+                                                </p>
                                             @else
                                                 <p class="font-medium text-gray-900">{{ $notification->data['title'] ?? 'Notifikasi Baru' }}</p>
                                                 <p class="text-gray-700 text-sm mt-1">{{ $notification->data['message'] ?? 'Notifikasi baru.' }}</p>
