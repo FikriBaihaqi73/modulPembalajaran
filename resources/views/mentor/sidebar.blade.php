@@ -50,6 +50,11 @@
             </svg>
             <span class="mx-3 text-sm font-medium transition-opacity duration-300 opacity-100 whitespace-nowrap overflow-hidden group-[.sidebar-collapsed-text]:opacity-0">Manajemen Santri</span>
         </a>
-        <!-- Add more mentor-specific navigation links here -->
+        <a class="flex items-center py-3 px-4 rounded-lg text-gray-100 hover:bg-blue-700 hover:bg-opacity-50 hover:text-white group mb-3 transition-all" href="{{ route('mentor.module-progress.index') }}">
+            <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13m-6 3H9M12 19V6m-6 3H3v9l9 3V9m5.75-.75V5.25A2.25 2.25 0 0018 3h.25a2.25 2.25 0 002.25 2.25v1.51M12 12l.375.375M12 15l3 3m-3-3V7.5M12 12l-3-3m-3 3l.375.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="mx-3 text-sm font-medium transition-opacity duration-300 opacity-100 whitespace-nowrap overflow-hidden group-[.sidebar-collapsed-text]:opacity-0">Lacak Kemajuan Modul</span>
+        </a>
     </nav>
 </div>

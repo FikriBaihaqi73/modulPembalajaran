@@ -62,13 +62,32 @@
             </div>
 
             {{-- Download PDF Button --}}
-            <div class="mt-4">
+            <div class="mt-4 flex flex-wrap items-center gap-4">
                 <a href="{{ route('santri.modules.download.pdf', $module->id) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m-8 7H4a2 2 0 01-2-2V6a2 2 0 012-2h16a2 2 0 012 2v8a2 2 0 01-2 2h-8m-4 0v-2a4 4 0 014-4h.875M16 18V9a2 2 0 00-2-2h-4a2 2 0 00-2 2v9m-3 3h10a2 2 0 002-2V8a2 2 0 00-2-2H9a2 2 0 00-2 2v13a2 2 0 002 2zM7 9h6"></path>
                     </svg>
                     Unduh Modul (PDF)
                 </a>
+
+                @auth
+                    <form action="{{ route('santri.modules.toggleCompletion', $module->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white {{ $module->is_completed_by_current_user ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700' }} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            @if($module->is_completed_by_current_user)
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2A9 9 0 111 12a9 9 0 0118 0z"></path>
+                                </svg>
+                                Tandai Belum Selesai
+                            @else
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Tandai Selesai
+                            @endif
+                        </button>
+                    </form>
+                @endauth
             </div>
 
         </div>

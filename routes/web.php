@@ -63,12 +63,15 @@ Route::middleware(['auth'])->prefix('mentor')->name('mentor.')->group(function (
     Route::post('/modules/upload-image', [MentorModuleController::class, 'uploadImage'])->name('modules.uploadImage');
     Route::post('/modules/{module}/toggle-visibility', [MentorModuleController::class, 'toggleVisibility'])->name('modules.toggleVisibility');
     Route::resource('/santri', MentorSantriController::class)->names('santri');
+    Route::get('/module-progress', [App\Http\Controllers\Mentor\ModuleProgressController::class, 'index'])->name('module-progress.index');
+    Route::get('/module-progress/{module}', [App\Http\Controllers\Mentor\ModuleProgressController::class, 'show'])->name('module-progress.show');
 });
 
 // Santri Routes
 Route::prefix('santri')->name('santri.')->group(function () {
     Route::get('/modules', [FrontendModuleController::class, 'index'])->name('modules.index');
     Route::get('/modules/{module}', [FrontendModuleController::class, 'show'])->name('modules.show');
+    Route::post('/modules/{module}/toggle-completion', [FrontendModuleController::class, 'toggleCompletion'])->name('modules.toggleCompletion');
 
     // New download routes
     Route::get('/modules/{module}/download-pdf', [ModuleDownloadController::class, 'downloadSingleModulePdf'])->name('modules.download.pdf');

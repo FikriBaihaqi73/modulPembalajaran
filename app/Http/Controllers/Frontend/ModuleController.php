@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Module;
 use App\Models\ModuleCategory;
 use App\Models\Major;
+use App\Models\ModuleProgress;
 use Illuminate\Support\Facades\Auth;
 
 class ModuleController extends Controller
@@ -67,5 +68,28 @@ class ModuleController extends Controller
                         ->findOrFail($id);
 
         return view('santri.modules.show', compact('module'));
+    }
+
+    /**
+     * Toggle the completion status of a module for the authenticated user.
+     */
+    public function toggleCompletion(Request $request, Module $module)
+    {
+        if (!Auth::check()) {
+            return redirect()->back()->with('error', 'Anda harus login untuk menandai modul.');
+        }
+
+        $user = Auth::user();
+
+        $progress = ModuleProgress::firstOrCreate(
+            ['user_id' => $user->id, 'module_id' => $module->id],
+            ['is_completed' => false] // Default to false if not exists
+        );
+
+        $progress->is_completed = !$progress->is_completed;
+        $progress->save();
+
+        $statusMessage = $progress->is_completed ? 'selesai' : 'belum selesai';
+        return redirect()->back()->with('success', 'Modul berhasil ditandai sebagai ' . $statusMessage . '.');
     }
 }
