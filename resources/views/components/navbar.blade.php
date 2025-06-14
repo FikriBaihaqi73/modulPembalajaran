@@ -1,4 +1,26 @@
 <nav x-data="{ mobileMenuOpen: false }" class="bg-white shadow-md sticky top-0 z-50">
+    <style>
+        .notification-bell {
+            transition: all 0.2s ease;
+        }
+        .notification-bell:hover {
+            transform: scale(1.1);
+        }
+        .notification-badge {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+            }
+            70% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(0.95);
+            }
+        }
+    </style>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             {{-- Logo --}}
@@ -34,7 +56,17 @@
                 @endguest
 
                 @auth
-                    <div x-data="{ open: false }" class="relative ml-4">
+                    <div x-data="{ open: false }" class="relative flex items-center ml-4"> {{-- Added flex items-center here --}}
+                        {{-- Notification Bell Icon --}}
+                        <a href="{{ route('santri.notifications.index') }}" class="notification-bell relative text-gray-700 hover:text-blue-600 focus:outline-none mr-4 p-1.5 rounded-full hover:bg-blue-50 transition-colors">
+                            <i class="fas fa-bell text-xl"></i>
+                            @if (Auth::user()->unreadNotifications->count() > 0)
+                                <span class="notification-badge absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full flex items-center justify-center min-w-[20px] h-5">
+                                    {{ Auth::user()->unreadNotifications->count() }}
+                                </span>
+                            @endif
+                        </a>
+
                         <button @click="open = !open" @click.outside="open = false" class="flex items-center space-x-2 text-gray-700 hover:text-blue-600 focus:outline-none">
                             <div class="flex items-center">
                                 <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-medium">
@@ -84,6 +116,16 @@
 
             {{-- Mobile menu button --}}
             <div class="flex items-center md:hidden">
+                @auth
+                    <a href="{{ route('santri.notifications.index') }}" class="notification-bell relative text-gray-700 hover:text-blue-600 focus:outline-none mr-4 p-1.5 rounded-full hover:bg-blue-50 transition-colors">
+                        <i class="fas fa-bell text-xl"></i>
+                        @if (Auth::user()->unreadNotifications->count() > 0)
+                            <span class="notification-badge absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full flex items-center justify-center min-w-[20px] h-5">
+                                {{ Auth::user()->unreadNotifications->count() }}
+                            </span>
+                        @endif
+                    </a>
+                @endauth
                 <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
                     <span class="sr-only">Open main menu</span>
                     <svg x-show="!mobileMenuOpen" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -131,6 +173,16 @@
                         </div>
                     </div>
                     <div class="mt-3 space-y-1">
+                        {{-- Mobile Notification Link --}}
+                        <a href="{{ route('santri.notifications.index') }}" class="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600">
+                            <i class="fas fa-bell mr-2 text-gray-500"></i>
+                            Notifikasi
+                            @if (Auth::user()->unreadNotifications->count() > 0)
+                                <span class="ml-auto bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                                    {{ Auth::user()->unreadNotifications->count() }}
+                                </span>
+                            @endif
+                        </a>
                         @if(Auth::user()->role->name === 'Admin')
                             <a href="{{ route('admin.dashboard') }}" class="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600">
                                 <i class="fas fa-tachometer-alt mr-2 text-gray-500"></i>

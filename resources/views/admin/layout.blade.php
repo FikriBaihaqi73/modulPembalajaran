@@ -37,6 +37,16 @@
                     </div>
 
                     <div class="flex items-center">
+                        @auth
+                            <a href="{{ route('admin.notifications.index') }}" class="notification-bell relative text-gray-700 hover:text-blue-600 focus:outline-none mr-4 p-1.5 rounded-full hover:bg-blue-50 transition-colors">
+                                <i class="fas fa-bell text-xl"></i>
+                                @if (Auth::user()->unreadNotifications->count() > 0)
+                                    <span class="notification-badge absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full flex items-center justify-center min-w-[20px] h-5">
+                                        {{ Auth::user()->unreadNotifications->count() }}
+                                    </span>
+                                @endif
+                            </a>
+                        @endauth
                         <div id="profileDropdown" class="relative ml-4">
                             <button id="profileDropdownToggle" class="flex items-center text-gray-700 hover:text-blue-600 focus:outline-none border-none outline-none bg-transparent transition-colors">
                                 <span class="mr-2 text-sm font-medium">Admin</span>

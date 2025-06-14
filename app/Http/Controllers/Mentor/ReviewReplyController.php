@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ModuleReview;
 use App\Models\ReviewReply;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\ReviewReplied;
 
 class ReviewReplyController extends Controller
 {
@@ -23,11 +24,14 @@ class ReviewReplyController extends Controller
         ]);
 
         // Create and save the reply
-        ReviewReply::create([
+        $reply = ReviewReply::create([
             'review_id' => $review->id,
             'user_id' => Auth::id(), // The mentor/admin who is replying
             'reply_content' => $request->reply_content,
         ]);
+
+        // Send notification to the review author (santri)
+        $review->user->notify(new ReviewReplied($reply));
 
         return redirect()->back()->with('success', 'Balasan Anda berhasil dikirim!');
     }

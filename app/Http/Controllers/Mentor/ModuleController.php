@@ -122,6 +122,22 @@ class ModuleController extends Controller
         // Attach categories to the module
         $module->moduleCategory()->sync($validatedData['module_category_ids']);
 
+        // Notify santri in the same major about the new module
+        $santriInMajor = \App\Models\User::where('role_id', function ($query) {
+            $query->select('id')
+                  ->from('roles')
+                  ->where('name', 'Santri')
+                  ->limit(1);
+        })
+        ->where('major_id', $module->major_id)
+        ->get();
+
+        $moduleLink = route('santri.modules.show', $module->id);
+
+        foreach ($santriInMajor as $santri) {
+            $santri->notify(new \App\Notifications\NewModuleCreated($module, $moduleLink));
+        }
+
         return redirect()->route('mentor.modules.index')->with('success', 'Modul berhasil ditambahkan.');
     }
 

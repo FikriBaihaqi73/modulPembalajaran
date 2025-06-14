@@ -8,23 +8,28 @@ PembelajaranApp adalah platform edukasi interaktif yang dirancang untuk memfasil
 ## Fitur Utama
 
 ### Untuk Santri:
--   **Jelajahi Modul:** Akses daftar modul pembelajaran yang komprehensif.
--   **Filter Modul:** Saring modul berdasarkan kategori dan, jika admin login, berdasarkan jurusan.
+-   **Jelajahi Modul:** Akses daftar modul pembelajaran yang komprehensif dengan opsi filter jurusan (saat admin login).
 -   **Akses Offline:** Unduh modul dalam format PDF atau kategori modul dalam format ZIP untuk dibaca kapan saja, di mana saja.
+-   **Pelacakan Kemajuan Modul:** Lacak status penyelesaian modul Anda, tandai modul sebagai selesai, dan lihat progres Anda secara visual.
+-   **Sistem Ulasan Modul:** Berikan penilaian dan ulasan untuk setiap modul yang telah Anda selesaikan.
+-   **Notifikasi Interaktif:** Terima notifikasi real-time, tandai sebagai sudah dibaca atau belum dibaca, dan hapus notifikasi yang tidak relevan.
 -   **Profil Pengguna:** Kelola detail profil pribadi dan kata sandi.
 
 ### Untuk Mentor:
 -   **Manajemen Modul:** Buat, edit, lihat, dan kelola modul pembelajaran yang terkait dengan jurusan spesifik mentor.
 -   **Manajemen Kategori Modul:** Atur kategori untuk modul mereka.
 -   **Manajemen Santri:** Kelola data santri yang terkait dengan jurusan mereka.
+-   **Pelacakan Kemajuan Santri:** Lihat detail perkembangan modul setiap santri yang Anda bimbing, termasuk statistik penyelesaian dan grafik kemajuan.
 -   **Pengunggahan Konten Kaya:** Gunakan editor Tiptap dengan kemampuan pengunggahan gambar dan pratinjau video YouTube.
 -   **Kontrol Visibilitas Modul:** Tentukan apakah modul terlihat oleh santri atau tidak.
+-   **Notifikasi Interaktif:** Terima notifikasi real-time, termasuk balasan ulasan, dan kelola statusnya (tandai dibaca/belum dibaca, hapus).
 
 ### Untuk Admin:
--   **Dasbor Komprehensif:** Lihat ringkasan total santri, total mentor, dan jumlah modul per jurusan.
+-   **Dasbor Komprehensif:** Lihat ringkasan total santri, total mentor, dan jumlah modul per jurusan dalam format kartu yang interaktif.
 -   **Manajemen Santri:** Lihat dan kelola data santri.
 -   **Manajemen Mentor:** Lihat dan kelola data mentor.
--   **Pemantauan Modul:** Lihat semua modul dari berbagai jurusan dengan opsi filter.
+-   **Pemantauan Modul:** Lihat semua modul dari berbagai jurusan dengan opsi filter jurusan.
+-   **Notifikasi Interaktif:** Terima notifikasi real-time, tandai sebagai sudah dibaca atau belum dibaca, dan hapus notifikasi yang tidak relevan.
 
 ## Teknologi yang Digunakan
 
@@ -32,6 +37,7 @@ PembelajaranApp adalah platform edukasi interaktif yang dirancang untuk memfasil
 -   **Frontend:** Blade (Templating Engine), JavaScript (dengan React untuk editor Tiptap)
 -   **Database:** MySQL (atau database relasional lainnya yang didukung Laravel)
 -   **Editor Konten:** Tiptap
+-   **Charting:** Chart.js
 -   **Ikon:** Font Awesome
 -   **Styling:** Tailwind CSS
 -   **Penyimpanan Media:** Cloudinary (untuk thumbnail modul)
