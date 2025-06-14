@@ -68,6 +68,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // User Management Routes
     Route::resource('users', UserController::class);
+
+    // Announcement Management Routes
+    Route::resource('announcements', \App\Http\Controllers\Admin\AnnouncementController::class);
 });
 
 // Mentor Routes
@@ -93,6 +96,9 @@ Route::middleware(['auth'])->prefix('mentor')->name('mentor.')->group(function (
         Route::delete('{id}', [MentorNotificationController::class, 'destroy'])->name('destroy');
         Route::post('{id}/mark-as-unread', [MentorNotificationController::class, 'markAsUnread'])->name('markAsUnread');
     });
+
+    // Announcement Management Routes
+    Route::resource('announcements', \App\Http\Controllers\Mentor\AnnouncementController::class);
 });
 
 // Santri Routes

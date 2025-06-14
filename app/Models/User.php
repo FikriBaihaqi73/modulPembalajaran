@@ -8,11 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Role;
 use App\Models\Major;
+use App\Models\Announcement; // <-- TAMBAHKAN BARIS INI
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -106,5 +107,13 @@ class User extends Authenticatable
     public function reviewReplies(): HasMany
     {
         return $this->hasMany(ReviewReply::class);
+    }
+
+    /**
+     * Get the announcements created by the user.
+     */
+    public function announcements(): HasMany
+    {
+        return $this->hasMany(Announcement::class);
     }
 }

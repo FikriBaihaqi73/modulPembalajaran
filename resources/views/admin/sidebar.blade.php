@@ -57,5 +57,9 @@
             </svg>
             <span class="mx-3 text-sm font-medium transition-opacity duration-300 opacity-100 whitespace-nowrap overflow-hidden group-[.sidebar-collapsed-text]:opacity-0">Module Management</span>
         </a>
+        <a class="flex items-center py-3 px-4 rounded-lg text-gray-100 hover:bg-blue-700 hover:bg-opacity-50 hover:text-white group mb-3 transition-all {{ request()->routeIs('admin.announcements.*') ? 'bg-blue-700 bg-opacity-50 text-white' : '' }}" href="{{ route('admin.announcements.index') }}">
+            <i class="fas fa-bullhorn flex-shrink-0 w-5 h-5 transition duration-75 group-hover:text-white {{ request()->routeIs('admin.announcements.*') ? 'text-white' : '' }}"></i>
+            <span class="mx-3 text-sm font-medium transition-opacity duration-300 opacity-100 whitespace-nowrap overflow-hidden group-[.sidebar-collapsed-text]:opacity-0">Pengumuman</span>
+        </a>
     </nav>
 </div>
