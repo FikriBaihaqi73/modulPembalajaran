@@ -22,6 +22,19 @@
 
     <main class="flex-grow pt-6 pb-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            {{-- Session Notifications --}}
+            @if (session('success'))
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md shadow-sm mb-6" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md shadow-sm mb-6" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             @yield('content')
         </div>
     </main>
@@ -74,6 +87,7 @@
             </div>
         </div>
     </footer>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.14.9/dist/cdn.min.js"></script>
+    @stack('scripts')
 </body>
 </html>
