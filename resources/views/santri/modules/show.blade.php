@@ -164,9 +164,33 @@
                             @if ($userReview->comment)
                                 <p>Komentar Anda: <em>"{{ $userReview->comment }}"</em></p>
                             @endif
-                            <button @click="showEditForm = true" class="mt-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                Edit Ulasan
-                            </button>
+                            <div class="flex items-center gap-3 mt-3">
+                                <button @click="showEditForm = true" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Edit Ulasan
+                                </button>
+                                <form action="{{ route('santri.modules.destroyReview', ['module' => $module->id, 'review' => $userReview->id]) }}" method="POST" class="inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus ulasan ini?')" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                        Hapus Ulasan
+                                    </button>
+                                </form>
+                            </div>
+                            {{-- Replies Section for current user's review --}}
+                            @if ($userReview->replies->count() > 0)
+                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                    <h4 class="text-md font-semibold text-gray-700 mb-2">Balasan:</h4>
+                                    <div class="space-y-3 pl-4 border-l border-gray-300">
+                                        @foreach ($userReview->replies as $reply)
+                                            <div class="bg-white p-3 rounded-lg shadow-sm">
+                                                <p class="font-semibold text-gray-800 text-sm mb-1">{{ $reply->user->name ?? 'Pengguna Tidak Dikenal' }}</p>
+                                                <p class="text-gray-700 text-sm">{{ $reply->reply_content }}</p>
+                                                <p class="text-xs text-gray-500 mt-1">{{ \Carbon\Carbon::parse($reply->created_at)->locale('id')->translatedFormat('d F Y, H:i') }}</p>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
                         {{-- Edit Review Form --}}
@@ -215,6 +239,7 @@
             {{-- List of Reviews --}}
             <div class="space-y-6">
                 @forelse ($module->reviews as $review)
+                    {{-- Only display other users' reviews, or all if guest --}}
                     @if (Auth::guest() || (Auth::check() && $review->user_id !== Auth::id()))
                         <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                             <div class="flex items-center mb-2">
@@ -233,6 +258,22 @@
                                 <p class="text-gray-700 text-sm">{{ $review->comment }}</p>
                             @endif
                             <p class="text-xs text-gray-500 mt-2">{{ \Carbon\Carbon::parse($review->created_at)->locale('id')->translatedFormat('d F Y, H:i') }}</p>
+
+                            {{-- Replies Section --}}
+                            @if ($review->replies->count() > 0)
+                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                    <h4 class="text-md font-semibold text-gray-700 mb-2">Balasan:</h4>
+                                    <div class="space-y-3 pl-4 border-l border-gray-300">
+                                        @foreach ($review->replies as $reply)
+                                            <div class="bg-white p-3 rounded-lg shadow-sm">
+                                                <p class="font-semibold text-gray-800 text-sm mb-1">{{ $reply->user->name ?? 'Pengguna Tidak Dikenal' }}</p>
+                                                <p class="text-gray-700 text-sm">{{ $reply->reply_content }}</p>
+                                                <p class="text-xs text-gray-500 mt-1">{{ \Carbon\Carbon::parse($reply->created_at)->locale('id')->translatedFormat('d F Y, H:i') }}</p>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     @endif
                 @empty

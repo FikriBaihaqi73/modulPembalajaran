@@ -111,6 +111,48 @@
                                 <p class="text-gray-700 text-sm">{{ $review->comment }}</p>
                             @endif
                             <p class="text-xs text-gray-500 mt-2">{{ \Carbon\Carbon::parse($review->created_at)->locale('id')->translatedFormat('d F Y, H:i') }}</p>
+
+                            {{-- Replies Section --}}
+                            @if ($review->replies->count() > 0)
+                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                    <h4 class="text-md font-semibold text-gray-700 mb-2">Balasan:</h4>
+                                    <div class="space-y-3 pl-4 border-l border-gray-300">
+                                        @foreach ($review->replies as $reply)
+                                            <div class="bg-white p-3 rounded-lg shadow-sm">
+                                                <p class="font-semibold text-gray-800 text-sm mb-1">{{ $reply->user->name ?? 'Pengguna Tidak Dikenal' }}</p>
+                                                <p class="text-gray-700 text-sm">{{ $reply->reply_content }}</p>
+                                                <p class="text-xs text-gray-500 mt-1">{{ \Carbon\Carbon::parse($reply->created_at)->locale('id')->translatedFormat('d F Y, H:i') }}</p>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Reply Form --}}
+                            @if (Auth::user()->role->name === 'Mentor' || Auth::user()->role->name === 'Admin')
+                                <div class="mt-4 pt-4 border-t border-gray-200" x-data="{ showReplyForm: false }">
+                                    <button @click="showReplyForm = !showReplyForm" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        <i class="fas fa-reply mr-2"></i>
+                                        <span x-text="showReplyForm ? 'Batalkan Balasan' : 'Balas Ulasan'"></span>
+                                    </button>
+
+                                    <form x-show="showReplyForm" action="{{ route('mentor.reviews.replies.store', $review->id) }}" method="POST" class="mt-4">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label for="reply_content_{{ $review->id }}" class="sr-only">Konten Balasan</label>
+                                            <textarea id="reply_content_{{ $review->id }}" name="reply_content" rows="3" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Tulis balasan Anda...">{{ old('reply_content') }}</textarea>
+                                            @error('reply_content')
+                                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class="flex justify-end">
+                                            <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                                Kirim Balasan
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>

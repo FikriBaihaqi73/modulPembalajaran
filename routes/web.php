@@ -14,6 +14,7 @@ use App\Http\Controllers\Mentor\MentorProfileController;
 use App\Http\Controllers\Frontend\ModuleController as FrontendModuleController;
 use App\Http\Controllers\Frontend\SantriProfileController;
 use App\Http\Controllers\Santri\ModuleDownloadController;
+use App\Http\Controllers\Mentor\ReviewReplyController;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -65,6 +66,7 @@ Route::middleware(['auth'])->prefix('mentor')->name('mentor.')->group(function (
     Route::resource('/santri', MentorSantriController::class)->names('santri');
     Route::get('/module-progress', [App\Http\Controllers\Mentor\ModuleProgressController::class, 'index'])->name('module-progress.index');
     Route::get('/module-progress/{module}', [App\Http\Controllers\Mentor\ModuleProgressController::class, 'show'])->name('module-progress.show');
+    Route::post('/reviews/{review}/replies', [ReviewReplyController::class, 'store'])->name('reviews.replies.store');
 });
 
 // Santri Routes
@@ -74,6 +76,7 @@ Route::prefix('santri')->name('santri.')->group(function () {
     Route::post('/modules/{module}/toggle-completion', [FrontendModuleController::class, 'toggleCompletion'])->name('modules.toggleCompletion');
     Route::post('/modules/{module}/review', [FrontendModuleController::class, 'storeReview'])->name('modules.storeReview');
     Route::put('/modules/{module}/review/{review}', [FrontendModuleController::class, 'updateReview'])->name('modules.updateReview');
+    Route::delete('/modules/{module}/review/{review}', [FrontendModuleController::class, 'destroyReview'])->name('modules.destroyReview');
 
     // New download routes
     Route::get('/modules/{module}/download-pdf', [ModuleDownloadController::class, 'downloadSingleModulePdf'])->name('modules.download.pdf');
