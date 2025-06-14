@@ -127,12 +127,19 @@ class ModuleController extends Controller
         }
 
         // Create and save the review
-        ModuleReview::create([
+        $review = ModuleReview::create([
             'user_id' => $user->id,
             'module_id' => $module->id,
             'rating' => $request->rating,
             'comment' => $request->comment,
         ]);
+
+        // Notify the mentor (module creator)
+        $mentor = $module->user; // Assuming module has a 'user' relationship to its creator
+        if ($mentor) {
+            $moduleLink = route('santri.modules.show', $module->id);
+            $mentor->notify(new \App\Notifications\NewModuleReview($review, $module->name, $user->name, $moduleLink));
+        }
 
         return redirect()->back()->with('success', 'Ulasan Anda berhasil dikirim!');
     }
