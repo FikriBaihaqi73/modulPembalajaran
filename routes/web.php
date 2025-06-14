@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Mentor\NotificationController as MentorNotificationController;
 use App\Http\Controllers\Frontend\NotificationController as FrontendNotificationController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', function () {
     return view('santri.home');
@@ -64,6 +65,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::delete('{id}', [AdminNotificationController::class, 'destroy'])->name('destroy');
         Route::post('{id}/mark-as-unread', [AdminNotificationController::class, 'markAsUnread'])->name('markAsUnread');
     });
+
+    // User Management Routes
+    Route::resource('users', UserController::class);
 });
 
 // Mentor Routes
