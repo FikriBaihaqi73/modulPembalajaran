@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $majorId = $mentor->major_id;
 
         // Total Modules created by this mentor
-        $totalModules = Module::where('user_id', $mentor->id)->count();
+        $totalModules = Module::where('major_id', $majorId)->count();
 
         // Total Module Categories for this mentor's major
         $totalModuleCategories = ModuleCategory::where('major_id', $majorId)->count();

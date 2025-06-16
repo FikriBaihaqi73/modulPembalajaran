@@ -20,7 +20,7 @@ class ModuleController extends Controller
     public function index(Request $request)
     {
         $mentor = Auth::user();
-        $query = Module::where('user_id', $mentor->id)->with(['major', 'moduleCategory']);
+        $query = Module::where('major_id', $mentor->major_id)->with(['major', 'moduleCategory']);
 
         // Apply search filter
         if ($request->has('search') && $request->input('search') != '') {
@@ -45,7 +45,7 @@ class ModuleController extends Controller
             });
         }
 
-        $modules = $query->paginate(10);
+        $modules = $query->latest()->paginate(10);
         $moduleCategories = ModuleCategory::where('major_id', $mentor->major_id)->get(); // Get categories for the filter dropdown
 
         return view('mentor.modules.index', compact('modules', 'moduleCategories'));
@@ -147,7 +147,7 @@ class ModuleController extends Controller
     public function show(string $id)
     {
         $mentor = Auth::user();
-        $module = Module::where('user_id', $mentor->id)->with(['major', 'moduleCategory'])->findOrFail($id);
+        $module = Module::where('major_id', $mentor->major_id)->with(['major', 'moduleCategory'])->findOrFail($id);
         return view('mentor.modules.show', compact('module'));
     }
 
@@ -157,7 +157,7 @@ class ModuleController extends Controller
     public function edit(string $id)
     {
         $mentor = Auth::user();
-        $module = Module::where('user_id', $mentor->id)->with('moduleCategory')->findOrFail($id);
+        $module = Module::where('major_id', $mentor->major_id)->with('moduleCategory')->findOrFail($id);
         $moduleCategories = ModuleCategory::where('major_id', $mentor->major_id)->get();
         return view('mentor.modules.edit', compact('module', 'moduleCategories'));
     }
@@ -168,7 +168,7 @@ class ModuleController extends Controller
     public function update(Request $request, string $id)
     {
         $mentor = Auth::user();
-        $module = Module::where('user_id', $mentor->id)->findOrFail($id);
+        $module = Module::where('major_id', $mentor->major_id)->findOrFail($id);
 
         $oldContent = $module->content; // Get old content before update
 
@@ -303,7 +303,7 @@ class ModuleController extends Controller
     public function destroy(string $id)
     {
         $mentor = Auth::user();
-        $module = Module::where('user_id', $mentor->id)->findOrFail($id);
+        $module = Module::where('major_id', $mentor->major_id)->findOrFail($id);
 
         try {
             // Delete thumbnail from Cloudinary if it exists
@@ -352,7 +352,8 @@ class ModuleController extends Controller
     public function toggleVisibility(string $id)
     {
         $mentor = Auth::user();
-        $module = Module::where('user_id', $mentor->id)->findOrFail($id);
+        $module = Module::where('major_id', $mentor->major_id)->findOrFail($id);
+
         $module->is_visible = !$module->is_visible;
         $module->save();
 

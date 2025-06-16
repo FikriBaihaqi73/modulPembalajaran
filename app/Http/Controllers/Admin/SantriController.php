@@ -30,7 +30,7 @@ class SantriController extends Controller
             $query->where('major_id', $majorId);
         }
 
-        $santri = $query->paginate(10);
+        $santri = $query->latest()->paginate(10);
         $majors = Major::all(); // Get all majors for the filter dropdown
 
         return view('admin.santri.index', compact('santri', 'majors'));

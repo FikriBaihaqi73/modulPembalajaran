@@ -35,7 +35,7 @@
             <tbody>
                 @forelse($santri as $s)
                 <tr>
-                    <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
+                    <td class="py-2 px-4 border-b text-center">{{ (($santri->currentPage() - 1) * $santri->perPage()) + $loop->iteration }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $s->username }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $s->name }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $s->major->name ?? 'N/A' }}</td>
@@ -58,7 +58,7 @@
     </div>
 
     {{-- Pagination Links --}}
-    <div class="mt-4">
+    <div class="flex justify-center my-8">
         {{ $santri->links() }}
     </div>
 @endsection

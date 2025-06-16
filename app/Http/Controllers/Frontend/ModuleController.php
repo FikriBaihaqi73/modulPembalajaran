@@ -18,17 +18,24 @@ class ModuleController extends Controller
     {
         $isAdmin = false;
         $majors = collect();
+        $query = Module::with(['major', 'moduleCategory'])->where('is_visible', true);
+        $moduleCategoriesQuery = ModuleCategory::query(); // Inisialisasi query untuk kategori
 
         if (Auth::check()) {
-            if (Auth::user()->role->name === 'Admin') {
+            $user = Auth::user();
+            if ($user->role->name === 'Admin') {
                 $isAdmin = true;
                 $majors = Major::all();
+                // Admin bisa melihat semua modul dan kategori secara default
+            } else {
+                // Non-admin (Santri), filter modul berdasarkan major_id user yang login
+                $query->where('major_id', $user->major_id);
+                // Non-admin (Santri), filter kategori berdasarkan major_id user yang login
+                $moduleCategoriesQuery->where('major_id', $user->major_id);
             }
         } else {
             return view('santri.modules.guest_index');
         }
-
-        $query = Module::with(['major', 'moduleCategory'])->where('is_visible', true);
 
         // Apply search filter
         if ($request->has('search') && $request->input('search') != '') {
@@ -47,14 +54,16 @@ class ModuleController extends Controller
             });
         }
 
-        // Apply major filter if user is admin and major_id is provided
+        // Apply major filter only if user is admin AND major_id is provided in request
         if ($isAdmin && $request->has('major_id') && $request->input('major_id') != '') {
             $majorId = $request->input('major_id');
             $query->where('major_id', $majorId);
+            // Jika admin memfilter berdasarkan major_id, kategori juga harus difilter
+            $moduleCategoriesQuery->where('major_id', $majorId);
         }
 
-        $modules = $query->paginate(12);
-        $moduleCategories = ModuleCategory::all();
+        $modules = $query->latest()->paginate(12);
+        $moduleCategories = $moduleCategoriesQuery->get(); // Ambil kategori yang sudah difilter
 
         return view('santri.modules.index', compact('modules', 'moduleCategories', 'isAdmin', 'majors'));
     }
@@ -64,10 +73,19 @@ class ModuleController extends Controller
      */
     public function show(string $id)
     {
-        // Ensure the module is visible and exists
+        // Ensure the module is visible, exists, and belongs to the user's major
         $module = Module::with(['major', 'moduleCategory', 'reviews.user', 'reviews.replies.user'])
-                        ->where('is_visible', true)
-                        ->findOrFail($id);
+                        ->where('is_visible', true);
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            // Santri hanya boleh melihat modul dari jurusannya
+            if ($user->role->name === 'Santri') {
+                $module->where('major_id', $user->major_id);
+            }
+        }
+
+        $module = $module->findOrFail($id);
 
         $userReview = null;
         if (Auth::check()) {
@@ -75,6 +93,67 @@ class ModuleController extends Controller
         }
 
         return view('santri.modules.show', compact('module', 'userReview'));
+    }
+
+    /**
+     * Display modules completed by the authenticated santri.
+     */
+    public function completedModules(Request $request)
+    {
+        if (!Auth::check() || Auth::user()->role->name !== 'Santri') {
+            return redirect()->route('login')->with('error', 'Anda harus login sebagai Santri untuk mengakses halaman ini.');
+        }
+
+        $user = Auth::user();
+
+        $query = Module::with(['major', 'moduleCategory', 'progress'])
+                        ->where('major_id', $user->major_id)
+                        ->whereHas('progress', function ($q) use ($user) {
+                            $q->where('user_id', $user->id)
+                              ->where('is_completed', true);
+                        });
+
+        $moduleCategoriesQuery = ModuleCategory::where('major_id', $user->major_id); // Categories relevant to the santri's major
+
+        // Apply search filter
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('content', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Apply module category filter
+        if ($request->has('module_category_id') && $request->input('module_category_id') != '') {
+            $categoryId = $request->input('module_category_id');
+            $query->whereHas('moduleCategory', function ($q) use ($categoryId) {
+                $q->where('module_categories.id', $categoryId);
+            });
+        }
+
+        $modules = $query->latest()->paginate(12);
+        $moduleCategories = $moduleCategoriesQuery->get();
+
+        $isAdmin = false; // For the view compatibility, as this is santri specific
+        $majors = collect(); // For the view compatibility, as this is santri specific
+
+        // Get total modules for the user's major
+        $totalModules = Module::where('major_id', $user->major_id)->where('is_visible', true)->count();
+
+        // Get completed modules count (already fetched by $modules query)
+        $completedModulesCount = $query->count();
+
+        // Get uncompleted modules count
+        $uncompletedModulesCount = Module::where('major_id', $user->major_id)
+            ->where('is_visible', true)
+            ->whereDoesntHave('progress', function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                    ->where('is_completed', true);
+            })
+            ->count();
+
+        return view('santri.modules.completed_index', compact('modules', 'moduleCategories', 'isAdmin', 'majors', 'totalModules', 'completedModulesCount', 'uncompletedModulesCount'));
     }
 
     /**

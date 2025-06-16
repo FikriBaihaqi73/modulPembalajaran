@@ -106,7 +106,7 @@
         </div>
 
         @if ($notifications->count() > 0)
-            <div class="mt-6">
+            <div class="flex justify-center my-8">
                 {{ $notifications->links() }}
             </div>
         @endif

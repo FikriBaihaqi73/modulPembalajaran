@@ -30,7 +30,7 @@ class MentorController extends Controller
             $query->where('major_id', $majorId);
         }
 
-        $mentor = $query->paginate(10);
+        $mentor = $query->latest()->paginate(10);
         $majors = Major::all(); // Get all majors for the filter dropdown
 
         return view('admin.mentor.index', compact('mentor', 'majors'));

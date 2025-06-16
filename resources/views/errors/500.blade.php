@@ -1,9 +1,9 @@
 @extends('errors.layout')
 
-@section('title', ($status_code ?? '404') . ' Not Found')
+@section('title', ($status_code ?? '500') . ' Internal Server Error')
 
 @section('content')
-    <p>{{ $errorMessage ?? 'Halaman yang Anda cari tidak ditemukan.' }}</p>
+    <p>{{ $errorMessage ?? 'Terjadi kesalahan internal server. Silakan coba lagi nanti.' }}</p>
     @isset($suggestion)
         <p>{{ $suggestion }}</p>
     @endisset

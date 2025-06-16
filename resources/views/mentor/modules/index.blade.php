@@ -40,7 +40,7 @@
             <tbody>
                 @forelse($modules as $module)
                 <tr>
-                    <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
+                    <td class="py-2 px-4 border-b text-center">{{ (($modules->currentPage() - 1) * $modules->perPage()) + $loop->iteration }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $module->name }}</td>
                     <td class="py-2 px-4 border-b text-center">
                         @if ($module->thumbnail)
@@ -88,7 +88,7 @@
     </div>
 
     {{-- Pagination Links --}}
-    <div class="mt-4">
+    <div class="flex justify-center my-8">
         {{ $modules->links() }}
     </div>
 @endsection

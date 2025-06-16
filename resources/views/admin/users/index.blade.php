@@ -41,6 +41,7 @@
             <table class="min-w-full bg-white rounded shadow">
                 <thead>
                     <tr>
+                        <th class="py-2 px-4 border-b text-center">Nomor</th>
                         <th class="py-2 px-4 border-b text-center">Nama</th>
                         <th class="py-2 px-4 border-b text-center">Username</th>
                         <th class="py-2 px-4 border-b text-center">Peran</th>
@@ -51,6 +52,7 @@
                 <tbody>
                     @forelse ($users as $user)
                         <tr>
+                            <td class="py-2 px-4 border-b text-center">{{ (($users->currentPage() - 1) * $users->perPage()) + $loop->iteration }}</td>
                             <td class="py-2 px-4 border-b text-center">{{ $user->name }}</td>
                             <td class="py-2 px-4 border-b text-center">{{ $user->username }}</td>
                             <td class="py-2 px-4 border-b text-center">
@@ -70,7 +72,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-2 px-4 text-center">Tidak ada pengguna ditemukan.</td>
+                            <td colspan="6" class="py-2 px-4 text-center">Tidak ada pengguna ditemukan.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -78,7 +80,7 @@
         </div>
 
         {{-- Pagination Links --}}
-        <div class="mt-4">
+        <div class="flex justify-center my-8">
             {{ $users->links() }}
         </div>
     </div>

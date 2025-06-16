@@ -28,7 +28,7 @@ class ModuleController extends Controller
             $query->where('major_id', $request->major_id);
         }
 
-        $modules = $query->with('major', 'moduleCategory')->paginate(10);
+        $modules = $query->with('major', 'moduleCategory')->latest()->paginate(10);
         $majors = Major::all(); // Get all majors for the filter dropdown
 
         return view('admin.modules.index', compact('modules', 'majors'));
