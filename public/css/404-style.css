@@ -1,0 +1,76 @@
+/* Placeholder for G404Error CSS - You should replace this with compiled CSS from index.styl */
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #0d0d0d;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+}
+
+canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.text-zone {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+    width: 90%;
+    max-width: 600px; /* Optional: Limit width for better readability */
+}
+
+.text-zone h1 {
+    font-size: 10em;
+    margin: 0;
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Blue glow */
+}
+
+.text-zone p {
+    font-size: 1.8em;
+    margin: 0.5em 0 1.5em 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.text-zone a {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #007bff; /* A distinct blue */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+}
+
+.text-zone a:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.6);
+}
+
+@media (max-width: 768px) {
+    .text-zone h1 {
+        font-size: 6em;
+    }
+
+    .text-zone p {
+        font-size: 1.2em;
+    }
+
+    .text-zone a {
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+}
