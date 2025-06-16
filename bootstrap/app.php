@@ -8,7 +8,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Request;
-use Throwable;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
