@@ -3,7 +3,6 @@
 @section('title', ($status_code ?? '429') . ' Too Many Requests')
 
 @section('content')
-    <h1>{{ $status_code ?? '429' }}</h1>
     <p>{{ $errorMessage ?? 'Terlalu banyak permintaan. Harap tunggu sebentar sebelum mencoba lagi.' }}</p>
     @isset($suggestion)
         <p>{{ $suggestion }}</p>
