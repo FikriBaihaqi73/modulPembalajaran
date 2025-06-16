@@ -85,7 +85,7 @@
                              x-transition:leave="transition ease-in duration-75"
                              x-transition:leave-start="transform opacity-100 scale-100"
                              x-transition:leave-end="transform opacity-0 scale-95"
-                             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200" style="display: none;">
+                             class="absolute right-0 top-full w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
                             @if(Auth::user()->role->name === 'Admin')
                                 <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <i class="fas fa-tachometer-alt mr-2 text-gray-500"></i>
@@ -100,6 +100,10 @@
                                 <a href="{{ route('santri.profile') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <i class="fas fa-user mr-2 text-gray-500"></i>
                                     Profil
+                                </a>
+                                <a href="{{ route('santri.modules.completed') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-check-circle mr-2 text-gray-500"></i>
+                                    Daftar modul yang sudah selesai dibaca
                                 </a>
                             @endif
                             <form method="POST" action="{{ route('logout') }}">
@@ -197,6 +201,10 @@
                             <a href="{{ route('santri.profile') }}" class="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600">
                                 <i class="fas fa-user mr-2 text-gray-500"></i>
                                 Profil
+                            </a>
+                            <a href="{{ route('santri.modules.completed') }}" class="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-blue-600">
+                                <i class="fas fa-check-circle mr-2 text-gray-500"></i>
+                                Daftar modul yang sudah selesai dibaca
                             </a>
                         @endif
                         <form method="POST" action="{{ route('logout') }}">

@@ -96,6 +96,67 @@ class ModuleController extends Controller
     }
 
     /**
+     * Display modules completed by the authenticated santri.
+     */
+    public function completedModules(Request $request)
+    {
+        if (!Auth::check() || Auth::user()->role->name !== 'Santri') {
+            return redirect()->route('login')->with('error', 'Anda harus login sebagai Santri untuk mengakses halaman ini.');
+        }
+
+        $user = Auth::user();
+
+        $query = Module::with(['major', 'moduleCategory', 'progress'])
+                        ->where('major_id', $user->major_id)
+                        ->whereHas('progress', function ($q) use ($user) {
+                            $q->where('user_id', $user->id)
+                              ->where('is_completed', true);
+                        });
+
+        $moduleCategoriesQuery = ModuleCategory::where('major_id', $user->major_id); // Categories relevant to the santri's major
+
+        // Apply search filter
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('content', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Apply module category filter
+        if ($request->has('module_category_id') && $request->input('module_category_id') != '') {
+            $categoryId = $request->input('module_category_id');
+            $query->whereHas('moduleCategory', function ($q) use ($categoryId) {
+                $q->where('module_categories.id', $categoryId);
+            });
+        }
+
+        $modules = $query->latest()->paginate(12);
+        $moduleCategories = $moduleCategoriesQuery->get();
+
+        $isAdmin = false; // For the view compatibility, as this is santri specific
+        $majors = collect(); // For the view compatibility, as this is santri specific
+
+        // Get total modules for the user's major
+        $totalModules = Module::where('major_id', $user->major_id)->where('is_visible', true)->count();
+
+        // Get completed modules count (already fetched by $modules query)
+        $completedModulesCount = $query->count();
+
+        // Get uncompleted modules count
+        $uncompletedModulesCount = Module::where('major_id', $user->major_id)
+            ->where('is_visible', true)
+            ->whereDoesntHave('progress', function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                    ->where('is_completed', true);
+            })
+            ->count();
+
+        return view('santri.modules.completed_index', compact('modules', 'moduleCategories', 'isAdmin', 'majors', 'totalModules', 'completedModulesCount', 'uncompletedModulesCount'));
+    }
+
+    /**
      * Toggle the completion status of a module for the authenticated user.
      */
     public function toggleCompletion(Request $request, Module $module)
