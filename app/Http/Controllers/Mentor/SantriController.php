@@ -31,7 +31,7 @@ class SantriController extends Controller
             });
         }
 
-        $santri = $query->paginate(10);
+        $santri = $query->latest()->paginate(10);
         return view('mentor.santri.index', compact('santri'));
     }
 

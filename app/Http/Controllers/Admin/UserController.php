@@ -36,7 +36,7 @@ class UserController extends Controller
             $query->where('major_id', $request->major_id);
         }
 
-        $users = $query->paginate(10);
+        $users = $query->latest()->paginate(10);
         $roles = Role::all();
         $majors = Major::all();
 

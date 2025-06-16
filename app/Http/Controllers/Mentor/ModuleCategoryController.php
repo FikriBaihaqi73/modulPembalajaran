@@ -23,7 +23,7 @@ class ModuleCategoryController extends Controller
             $query->where('name', 'like', '%' . $search . '%');
         }
 
-        $moduleCategories = $query->paginate(10);
+        $moduleCategories = $query->latest()->paginate(10);
         return view('mentor.module_categories.index', compact('moduleCategories'));
     }
 

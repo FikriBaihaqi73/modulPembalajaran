@@ -37,7 +37,7 @@ class ModuleProgressController extends Controller
             });
         }
 
-        $modules = $query->paginate(12);
+        $modules = $query->latest()->paginate(12);
 
         // Filter module categories based on the mentor's own major_id
         $moduleCategories = ModuleCategory::where('major_id', $mentor->major_id)->get();

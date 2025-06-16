@@ -62,7 +62,7 @@ class ModuleController extends Controller
             $moduleCategoriesQuery->where('major_id', $majorId);
         }
 
-        $modules = $query->paginate(12);
+        $modules = $query->latest()->paginate(12);
         $moduleCategories = $moduleCategoriesQuery->get(); // Ambil kategori yang sudah difilter
 
         return view('santri.modules.index', compact('modules', 'moduleCategories', 'isAdmin', 'majors'));

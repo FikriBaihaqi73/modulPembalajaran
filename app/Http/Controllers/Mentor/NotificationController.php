@@ -12,7 +12,7 @@ class NotificationController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $notifications = $user->notifications()->paginate(10);
+        $notifications = $user->notifications()->latest()->paginate(10);
         $unreadNotificationsCount = $user->unreadNotifications->count();
 
         return view('mentor.notifications.index', compact('notifications', 'unreadNotificationsCount'));

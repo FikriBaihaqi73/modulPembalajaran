@@ -45,7 +45,7 @@ class ModuleController extends Controller
             });
         }
 
-        $modules = $query->paginate(10);
+        $modules = $query->latest()->paginate(10);
         $moduleCategories = ModuleCategory::where('major_id', $mentor->major_id)->get(); // Get categories for the filter dropdown
 
         return view('mentor.modules.index', compact('modules', 'moduleCategories'));
