@@ -6,6 +6,27 @@
     <div class="container mx-auto px-4 py-6">
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Lacak Kemajuan Modul Santri</h2>
 
+        {{-- Search and Filter Form Container --}}
+        <div class="mt-4 mb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <form action="{{ route('mentor.module-progress.index') }}" method="GET" class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
+                <input type="text" name="search" placeholder="Cari modul..." value="{{ request('search') }}" class="border rounded px-3 py-2 w-full sm:w-auto">
+                <select name="category_id" class="border rounded px-3 py-2 w-full sm:w-auto">
+                    <option value="">Semua Kategori</option>
+                    @foreach ($moduleCategories as $category)
+                        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <button type="submit" class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Cari & Filter</button>
+                    @if(request('search') || request('category_id'))
+                        <a href="{{ route('mentor.module-progress.index') }}" class="text-red-600">Reset</a>
+                    @endif
+                </div>
+            </form>
+        </div>
+
         @if ($modules->isEmpty())
             <div class="bg-white rounded-lg shadow-sm p-6 text-center">
                 <p class="text-gray-600">Anda belum memiliki modul yang dibuat.</p>
@@ -41,6 +62,11 @@
                         </div>
                     </a>
                 @endforeach
+            </div>
+
+            {{-- Pagination Links --}}
+            <div class="flex justify-center my-8">
+                {{ $modules->appends(request()->except('page'))->links() }}
             </div>
         @endif
     </div>

@@ -30,7 +30,7 @@
             <tbody>
                 @forelse($moduleCategories as $category)
                 <tr>
-                    <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
+                    <td class="py-2 px-4 border-b text-center">{{ (($moduleCategories->currentPage() - 1) * $moduleCategories->perPage()) + $loop->iteration }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $category->name }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $category->major->name ?? 'N/A' }}</td>
                     <td class="py-2 px-4 border-b text-center">
@@ -52,7 +52,7 @@
     </div>
 
     {{-- Pagination Links --}}
-    <div class="mt-4">
+    <div class="flex justify-center my-8">
         {{ $moduleCategories->links() }}
     </div>
 @endsection

@@ -61,7 +61,7 @@
         </div>
 
         {{-- Pagination Links --}}
-        <div class="mt-4">
+        <div class="flex justify-center my-8">
             {{ $announcements->links() }}
         </div>
     </div>
