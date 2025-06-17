@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Error')</title>
-    <link rel="stylesheet" href="{{ asset('css/404-style.css') }}">
+    @vite(['resources/js/app.js'])
 </head>
 <body>
     <div class="text-zone">
-        @yield('content')
+        <h1>@yield('status_code', 'Error')</h1>
+        <p>@yield('error_message', 'Terjadi kesalahan.')</p>
+        @isset($suggestion)
+            <p>@yield('suggestion')</p>
+        @endisset
+        @isset($dynamicInfo)
+            <p>@yield('dynamic_info')</p>
+        @endisset
+        <a href="/">Kembali ke Beranda</a>
     </div>
-
-    <script>
-        const dynamicInfo = @json($dynamic_info ?? []);
-        console.log('Dynamic Info:', dynamicInfo);
-        // Anda bisa menggunakan `dynamicInfo.timestamp` atau `dynamicInfo.request_path` di sini
-    </script>
-    <script src="{{ asset('js/404-script.js') }}"></script>
 </body>
 </html>

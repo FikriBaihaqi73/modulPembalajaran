@@ -43,7 +43,7 @@ class ModuleSeeder extends Seeder
                 for ($i = 1; $i <= 10; $i++) {
                     $module = Module::create([
                         'name' => $faker->unique()->sentence(rand(3, 6)),
-                        'content' => $faker->paragraphs(rand(3, 7), true),
+                        'content' => $faker->sentences(rand(3, 5), true),
                         'thumbnail' => 'https://via.placeholder.com/640x480.png/00dddd?text=module+' . $faker->randomNumber(2),
                         'major_id' => $category->major_id,
                         'user_id' => $mentor->id,
