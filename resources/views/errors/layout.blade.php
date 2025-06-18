@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="text-zone">
-        <h1>@yield('status_code', 'Error')</h1>
+        {{-- <h1>@yield('status_code', 'Error')</h1> --}}
         <p>@yield('error_message', 'Terjadi kesalahan.')</p>
         @isset($suggestion)
             <p>@yield('suggestion')</p>
