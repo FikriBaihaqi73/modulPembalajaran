@@ -10,6 +10,14 @@
     },
     "routes": [
         {
+            "src": "/favicon.ico",
+            "dest": "/favicon.ico"
+        },
+        {
+            "src": "/index.php",
+            "dest": "/index.php"
+        },
+        {
             "src": "/build/(.*)",
             "dest": "/build/$1"
         },
