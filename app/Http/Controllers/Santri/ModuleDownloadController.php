@@ -23,7 +23,28 @@ class ModuleDownloadController extends Controller
      */
     private function embedImagesInHtml($htmlContent)
     {
-        $dom = new DOMDocument();
+        // 1. Ganti <iframe> YouTube dengan <a> pakai regex
+        $htmlContent = preg_replace_callback(
+            '/<iframe[^>]*src=["\\\']([^"\\\']+youtube[^"\\\']+)["\\\'][^>]*><\\/iframe>/i',
+            function ($matches) {
+                $src = $matches[1];
+                // Ambil video ID
+                if (preg_match('/(?:youtube(?:-nocookie)?\\.com\\/(?:embed\\/|v\\/|watch\\?v=|watch\\?.+&v=)([a-zA-Z0-9_-]{11})|youtu\\.be\\/([a-zA-Z0-9_-]{11}))/',$src, $idMatch)) {
+                    $videoId = $idMatch[1] ?? $idMatch[2] ?? null;
+                    if ($videoId) {
+                        $youtubeLink = 'https://www.youtube.com/watch?v=' . $videoId;
+                        return '<a href="' . $youtubeLink . '" target="_blank" style="color: #1e40af; text-align: center; display: block; margin-bottom: 1em; text-decoration: underline;">Tonton video di YouTube: ' . $youtubeLink . '</a>';
+                    }
+                }
+                // Jika gagal, hapus saja iframe
+                return '';
+            },
+            $htmlContent
+        );
+
+        // 2. Proses gambar seperti biasa
+        $htmlContent = '<div>' . $htmlContent . '</div>';
+        $dom = new \DOMDocument();
         libxml_use_internal_errors(true);
         $dom->loadHTML(mb_convert_encoding($htmlContent, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         libxml_clear_errors();
@@ -87,7 +108,13 @@ class ModuleDownloadController extends Controller
             }
         }
 
-        return $dom->saveHTML();
+        // Ambil isi <div> saja (tanpa <html><body>)
+        $body = $dom->getElementsByTagName('div')->item(0);
+        $innerHTML = '';
+        foreach ($body->childNodes as $child) {
+            $innerHTML .= $dom->saveHTML($child);
+        }
+        return $innerHTML;
     }
 
     /**
@@ -131,6 +158,9 @@ class ModuleDownloadController extends Controller
         }
 
         $processedContent = $this->embedImagesInHtml($module->content);
+
+        // Log the processed HTML content before passing it to PDF for debugging
+        Log::debug('Processed HTML content for PDF:', ['content' => $processedContent]);
 
         $data = [
             'module' => $module,
@@ -207,6 +237,9 @@ class ModuleDownloadController extends Controller
                 }
 
                 $processedContent = $this->embedImagesInHtml($module->content);
+
+                // Log the processed HTML content before passing it to PDF
+                Log::debug('Processed HTML content for PDF (ZIP):', ['content' => $processedContent]);
 
                 $data = [
                     'module' => $module,
