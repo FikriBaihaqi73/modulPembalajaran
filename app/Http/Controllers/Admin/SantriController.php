@@ -48,10 +48,10 @@ class SantriController extends Controller
         $data = $request->validate([
             'username' => 'required|unique:users',
             'name' => 'required',
-            'password' => 'required|min:6',
+            'password' => 'required|min:6|confirmed',
             'major_id' => 'required|exists:majors,id',
         ]);
-        $data['password'] = bcrypt($data['password']);
+        $data['password'] = isset($data['password']) ? bcrypt($data['password']) : null;
         $data['role_id'] = $santriRole->id;
         User::create($data);
         return redirect()->route('admin.santri.index')->with('success', 'Santri berhasil ditambahkan.');
@@ -70,10 +70,10 @@ class SantriController extends Controller
         $data = $request->validate([
             'username' => 'required|unique:users,username,'.$santri->id,
             'name' => 'required',
-            'password' => 'nullable|min:6',
+            'password' => 'nullable|min:6|confirmed',
             'major_id' => 'required|exists:majors,id',
         ]);
-        if ($data['password']) {
+        if (isset($data['password']) && $data['password']) {
             $data['password'] = bcrypt($data['password']);
         } else {
             unset($data['password']);

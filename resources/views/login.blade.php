@@ -27,14 +27,15 @@
                     <label class="hidden" for="username">Username</label>
                     <input type="text" id="username" placeholder="Username" name="username" value="{{ old('username') }}">
                 </div>
-                <div class="input-group">
+                <div class="input-group relative" x-data="{ show: false }">
                     <label class="hidden" for="password">Password</label>
-                    <input type="password" id="password" placeholder="Password" name="password">
+                    <input :type="show ? 'text' : 'password'" id="password" placeholder="Password" name="password" class="pr-10">
+                    <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{ 'fa fa-eye': !show, 'fa fa-eye-slash': show }"></i>
                 </div>
                 <button type="submit" class="login-button">Login</button>
-                </div>
             </form>
         </div>
     </div>
+    <script defer src="https://unpkg.com/alpinejs@3.14.9/dist/cdn.min.js"></script>
 </body>
 </html>

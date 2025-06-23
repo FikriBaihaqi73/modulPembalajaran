@@ -24,7 +24,23 @@
     </div>
     <div class="mb-4">
         <label class="block mb-1">Password (isi jika ingin ganti)</label>
-        <input type="password" name="password" class="w-full border rounded px-3 py-2">
+        <div class="relative" x-data="{ show: false }">
+            <input :type="show ? 'text' : 'password'" name="password" class="w-full border rounded px-3 py-2 pr-10 @error('password') border-red-500 @enderror">
+            <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{'fa fa-eye': !show, 'fa fa-eye-slash': show}"></i>
+        </div>
+        @error('password')
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+        @enderror
+    </div>
+    <div class="mb-4">
+        <label class="block mb-1">Konfirmasi Password</label>
+        <div class="relative" x-data="{ show: false }">
+            <input :type="show ? 'text' : 'password'" name="password_confirmation" class="w-full border rounded px-3 py-2 pr-10 @error('password') border-red-500 @enderror">
+            <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{'fa fa-eye': !show, 'fa fa-eye-slash': show}"></i>
+        </div>
+        @error('password')
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+        @enderror
     </div>
     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Update</button>
     <a href="{{ route('admin.santri.index') }}" class="ml-2 text-gray-600">Batal</a>

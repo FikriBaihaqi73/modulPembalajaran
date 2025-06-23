@@ -29,7 +29,10 @@
 
                 <div>
                     <label for="password" class="block mb-1">Password (Biarkan kosong jika tidak ingin mengubah)</label>
-                    <input type="password" name="password" id="password" class="w-full border rounded px-3 py-2 @error('password') border-red-500 @enderror">
+                    <div class="relative" x-data="{ show: false }">
+                        <input :type="show ? 'text' : 'password'" name="password" id="adminUserEditPassword" class="w-full border rounded px-3 py-2 pr-10 @error('password') border-red-500 @enderror">
+                        <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{'fa fa-eye': !show, 'fa fa-eye-slash': show}"></i>
+                    </div>
                     @error('password')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -37,7 +40,13 @@
 
                 <div>
                     <label for="password_confirmation" class="block mb-1">Konfirmasi Password</label>
-                    <input type="password" name="password_confirmation" id="password_confirmation" class="w-full border rounded px-3 py-2">
+                    <div class="relative" x-data="{ show: false }">
+                        <input :type="show ? 'text' : 'password'" name="password_confirmation" id="adminUserEditPasswordConfirmation" class="w-full border rounded px-3 py-2 pr-10 @error('password_confirmation') border-red-500 @enderror">
+                        <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{'fa fa-eye': !show, 'fa fa-eye-slash': show}"></i>
+                    </div>
+                    @error('password_confirmation')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>

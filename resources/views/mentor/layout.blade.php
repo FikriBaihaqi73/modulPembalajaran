@@ -129,5 +129,6 @@
         });
     </script>
     @yield('scripts')
+    <script defer src="https://unpkg.com/alpinejs@3.14.9/dist/cdn.min.js"></script>
 </body>
 </html>

@@ -94,7 +94,10 @@
                         @csrf
                         <div>
                             <label for="current_password" class="block text-sm font-medium text-gray-700">Password Saat Ini</label>
-                            <input type="password" name="current_password" id="current_password" class="mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" required>
+                            <div class="relative" x-data="{ show: false }">
+                                <input :type="show ? 'text' : 'password'" name="current_password" id="current_password" class="mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md pr-10" required>
+                                <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{'fa fa-eye': !show, 'fa fa-eye-slash': show}"></i>
+                            </div>
                             @error('current_password')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -102,7 +105,10 @@
 
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700">Password Baru</label>
-                            <input type="password" name="password" id="password" class="mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" required>
+                            <div class="relative" x-data="{ show: false }">
+                                <input :type="show ? 'text' : 'password'" name="password" id="password" class="mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md pr-10" required>
+                                <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{'fa fa-eye': !show, 'fa fa-eye-slash': show}"></i>
+                            </div>
                             @error('password')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -110,7 +116,10 @@
 
                         <div>
                             <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password Baru</label>
-                            <input type="password" id="password_confirmation" name="password_confirmation" class="mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" required>
+                            <div class="relative" x-data="{ show: false }">
+                                <input :type="show ? 'text' : 'password'" id="password_confirmation" name="password_confirmation" class="mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md pr-10" required>
+                                <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{'fa fa-eye': !show, 'fa fa-eye-slash': show}"></i>
+                            </div>
                         </div>
 
                         <div class="flex justify-end">
