@@ -9,6 +9,8 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\MentorMiddleware;
 
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -22,6 +24,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'login',
         ]);
         $middleware->trustProxies(at: '*');
+
+        // Daftarkan middleware kustom
+        $middleware->alias([
+            'admin' => 'App\Http\Middleware\AdminMiddleware',
+            'mentor' => 'App\Http\Middleware\MentorMiddleware',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (ValidationException $e, Request $request) {

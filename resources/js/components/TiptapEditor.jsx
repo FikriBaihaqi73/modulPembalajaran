@@ -437,7 +437,7 @@ const TiptapEditor = ({ content, onUpdate }) => {
         openOnClick: false,
       }),
       YouTube.configure({
-        nocookie: true,
+        nocookie: false,
         modestbranding: true,
         autoplay: false,
         controls: true,

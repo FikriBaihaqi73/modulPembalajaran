@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class AdminMiddleware
+class MentorMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,11 +16,11 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Admin') { // Periksa role_name admin melalui relasi
+        if (Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Mentor') { // Periksa role_name mentor melalui relasi
             return $next($request);
         }
 
-        // Jika bukan admin, redirect ke home atau login
+        // Jika bukan mentor, redirect ke home atau login
         return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
     }
 }

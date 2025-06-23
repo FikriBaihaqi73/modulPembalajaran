@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\NotificationController as AdminNotificationContro
 use App\Http\Controllers\Mentor\NotificationController as MentorNotificationController;
 use App\Http\Controllers\Frontend\NotificationController as FrontendNotificationController;
 use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('santri.home');
@@ -45,7 +46,7 @@ Route::get('/home', function () {
 })->middleware('auth');
 
 // Admin Routes
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -74,7 +75,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 });
 
 // Mentor Routes
-Route::middleware(['auth'])->prefix('mentor')->name('mentor.')->group(function () {
+Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(function () {
     Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [MentorProfileController::class, 'index'])->name('profile');
     Route::post('/profile/update-details', [MentorProfileController::class, 'updateProfileDetails'])->name('profile.updateDetails');
