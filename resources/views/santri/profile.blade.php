@@ -149,9 +149,10 @@
                             @csrf
                             <div>
                                 <label for="current_password" class="block text-sm font-medium text-gray-700">Password Saat Ini</label>
-                                <div class="mt-1">
-                                    <input type="password" name="current_password" id="current_password" required
-                                        class="shadow-sm block w-full sm:text-sm rounded-md {{ $errors->has('current_password') ? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500' }}">
+                                <div class="mt-1 relative" x-data="{ show: false }">
+                                    <input :type="show ? 'text' : 'password'" name="current_password" id="santriCurrentPassword" required
+                                        class="shadow-sm block w-full sm:text-sm rounded-md pr-10 {{ $errors->has('current_password') ? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500' }}">
+                                    <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{'fa fa-eye': !show, 'fa fa-eye-slash': show}"></i>
                                 </div>
                                 @error('current_password')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -160,9 +161,10 @@
 
                             <div>
                                 <label for="new_password" class="block text-sm font-medium text-gray-700">Password Baru</label>
-                                <div class="mt-1">
-                                    <input type="password" name="new_password" id="new_password" required
-                                        class="shadow-sm block w-full sm:text-sm rounded-md {{ $errors->has('new_password') ? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500' }}">
+                                <div class="mt-1 relative" x-data="{ show: false }">
+                                    <input :type="show ? 'text' : 'password'" name="new_password" id="santriNewPassword" required
+                                        class="shadow-sm block w-full sm:text-sm rounded-md pr-10 {{ $errors->has('new_password') ? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500' }}">
+                                    <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{'fa fa-eye': !show, 'fa fa-eye-slash': show}"></i>
                                 </div>
                                 @error('new_password')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -171,10 +173,14 @@
 
                             <div>
                                 <label for="new_password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password Baru</label>
-                                <div class="mt-1">
-                                    <input type="password" name="new_password_confirmation" id="new_password_confirmation" required
-                                        class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <div class="mt-1 relative" x-data="{ show: false }">
+                                    <input :type="show ? 'text' : 'password'" name="new_password_confirmation" id="santriNewPasswordConfirmation" required
+                                        class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md pr-10 {{ $errors->has('new_password_confirmation') ? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500' }}">
+                                    <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{'fa fa-eye': !show, 'fa fa-eye-slash': show}"></i>
                                 </div>
+                                @error('new_password_confirmation')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div class="flex justify-end">

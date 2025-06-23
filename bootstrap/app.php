@@ -8,6 +8,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,8 +21,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'login',
         ]);
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->render(function (ValidationException $e, Request $request) {
+            return back()->withInput($request->input())->withErrors($e->errors());
+        });
+
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('api/*')) { // Contoh: Jika ini adalah permintaan API
                 return response()->json([

@@ -25,7 +25,10 @@
             </div>
             <div class="mb-4">
                 <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password (isi jika ingin ganti):</label>
-                <input type="password" name="password" id="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('password') border-red-500 @enderror">
+                <div class="relative" x-data="{ show: false }">
+                    <input :type="show ? 'text' : 'password'" name="password" id="mentorSantriEditPassword" class="shadow appearance-none border rounded w-full py-2 px-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('password') border-red-500 @enderror">
+                    <i class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500" @click="show = !show" :class="{'fa fa-eye': !show, 'fa fa-eye-slash': show}"></i>
+                </div>
                 @error('password')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror

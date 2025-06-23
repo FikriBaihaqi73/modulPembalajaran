@@ -73,7 +73,7 @@ class UserController extends Controller
         $newUser = User::create([
             'name' => $validatedData['name'],
             'username' => $validatedData['username'],
-            'password' => Hash::make($validatedData['password']),
+            'password' => isset($validatedData['password']) ? Hash::make($validatedData['password']) : null,
             'role_id' => $validatedData['role_id'],
             'major_id' => $validatedData['major_id'],
         ]);
@@ -123,7 +123,7 @@ class UserController extends Controller
         $user->role_id = $validatedData['role_id'];
         $user->major_id = $validatedData['major_id'];
 
-        if (!empty($validatedData['password'])) {
+        if (isset($validatedData['password']) && !empty($validatedData['password'])) {
             $user->password = Hash::make($validatedData['password']);
         }
 

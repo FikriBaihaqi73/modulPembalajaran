@@ -14,14 +14,16 @@ class NewModuleCreated extends Notification
 
     protected $module;
     protected $moduleLink;
+    protected $isUpdate;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Module $module, $moduleLink)
+    public function __construct(Module $module, $moduleLink, bool $isUpdate = false)
     {
         $this->module = $module;
         $this->moduleLink = $moduleLink;
+        $this->isUpdate = $isUpdate;
     }
 
     /**
@@ -52,11 +54,20 @@ class NewModuleCreated extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        if ($this->isUpdate) {
+            $title = 'Modul Diperbarui!';
+            $message = 'Modul "' . $this->module->name . '" telah diubah di jurusan Anda.';
+        } else {
+            $title = 'Modul Baru Tersedia!';
+            $message = 'Modul baru berjudul "' . $this->module->name . '" telah tersedia di jurusan Anda.';
+        }
+
         return [
-            'title' => 'Modul Baru Tersedia!',
-            'message' => 'Modul baru berjudul "' . $this->module->name . '" telah tersedia di jurusan Anda.',
+            'title' => $title,
+            'message' => $message,
             'module_name' => $this->module->name,
             'link' => $this->moduleLink,
+            'module_id' => $this->module->id,
         ];
     }
 }
