@@ -135,6 +135,11 @@ class AnnouncementController extends Controller
             'expires_at' => 'nullable|date|after_or_equal:published_at',
         ]);
 
+        // Delete existing notifications for this announcement
+        \Illuminate\Notifications\DatabaseNotification::where('type', 'App\\Notifications\\NewAnnouncement')
+            ->whereJsonContains('data->announcement_id', $announcement->id)
+            ->delete();
+
         $announcement->update([
             'title' => $validatedData['title'],
             'content' => $validatedData['content'],
@@ -144,7 +149,32 @@ class AnnouncementController extends Controller
             'expires_at' => $validatedData['expires_at'] ?? null,
         ]);
 
-        return redirect()->route('admin.announcements.index')->with('success', 'Pengumuman berhasil diperbarui.');
+        // Re-dispatch notification for updated announcement
+        if ($announcement->target_audience === 'all') {
+            $usersToNotify = User::all();
+        } elseif ($announcement->target_audience === 'santri') {
+            $santriRole = Role::where('name', 'Santri')->first();
+            $usersToNotify = User::where('role_id', $santriRole->id);
+            if ($announcement->major_id) {
+                $usersToNotify->where('major_id', $announcement->major_id);
+            }
+            $usersToNotify = $usersToNotify->get();
+        } elseif ($announcement->target_audience === 'mentor') {
+            $mentorRole = Role::where('name', 'Mentor')->first();
+            $usersToNotify = User::where('role_id', $mentorRole->id);
+            if ($announcement->major_id) {
+                $usersToNotify->where('major_id', $announcement->major_id);
+            }
+            $usersToNotify = $usersToNotify->get();
+        } else {
+            $usersToNotify = collect(); // No one to notify
+        }
+
+        foreach ($usersToNotify as $user) {
+            $user->notify(new NewAnnouncement($announcement));
+        }
+
+        return redirect()->route('admin.announcements.index')->with('success', 'Pengumuman berhasil diperbarui dan notifikasi dikirim ulang.');
     }
 
     /**
@@ -152,7 +182,12 @@ class AnnouncementController extends Controller
      */
     public function destroy(Announcement $announcement)
     {
+        // Delete existing notifications for this announcement
+        \Illuminate\Notifications\DatabaseNotification::where('type', 'App\\Notifications\\NewAnnouncement')
+            ->whereJsonContains('data->announcement_id', $announcement->id)
+            ->delete();
+
         $announcement->delete();
-        return redirect()->route('admin.announcements.index')->with('success', 'Pengumuman berhasil dihapus.');
+        return redirect()->route('admin.announcements.index')->with('success', 'Pengumuman berhasil dihapus dan notifikasi terkait juga dihapus.');
     }
 }

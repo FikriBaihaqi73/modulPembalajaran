@@ -6,7 +6,7 @@
     <h2 class="text-3xl font-semibold text-gray-800">Edit Modul</h2>
 
     <div class="mt-4 bg-white p-6 rounded shadow">
-        <form action="{{ route('mentor.modules.update', $module->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('mentor.modules.update', $module->id) }}" method="POST" enctype="multipart/form-data" id="moduleForm">
             @csrf
             @method('PUT')
             <div class="mb-4">

@@ -11,6 +11,9 @@ use Cloudinary\Cloudinary;
 use Cloudinary\Configuration\Configuration;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Notifications\DatabaseNotification;
+use App\Notifications\NewModuleCreated;
+use App\Notifications\ModuleDeleted;
 
 class ModuleController extends Controller
 {
@@ -251,6 +254,11 @@ class ModuleController extends Controller
             }
         }
 
+        // Delete existing notifications for this module
+        DatabaseNotification::where('type', 'App\\Notifications\\NewModuleCreated')
+            ->whereJsonContains('data->module_id', $module->id)
+            ->delete();
+
         $module->update([
             'name' => $validatedData['name'],
             'content' => $validatedData['content'],
@@ -294,7 +302,23 @@ class ModuleController extends Controller
             }
         }
 
-        return redirect()->route('mentor.modules.index')->with('success', 'Modul berhasil diupdate.');
+        // Re-dispatch notification to santri in the same major about the updated module
+        $santriInMajor = \App\Models\User::where('role_id', function ($query) {
+            $query->select('id')
+                  ->from('roles')
+                  ->where('name', 'Santri')
+                  ->limit(1);
+        })
+        ->where('major_id', $module->major_id)
+        ->get();
+
+        $moduleLink = route('santri.modules.show', $module->id);
+
+        foreach ($santriInMajor as $santri) {
+            $santri->notify(new \App\Notifications\NewModuleCreated($module, $moduleLink, true)); // Pass true for isUpdate
+        }
+
+        return redirect()->route('mentor.modules.index')->with('success', 'Modul berhasil diupdate dan notifikasi dikirim ulang.');
     }
 
     /**
@@ -306,6 +330,11 @@ class ModuleController extends Controller
         $module = Module::where('major_id', $mentor->major_id)->findOrFail($id);
 
         try {
+            // Delete existing NewModuleCreated notifications for this module
+            DatabaseNotification::where('type', 'App\\Notifications\\NewModuleCreated')
+                ->whereJsonContains('data->module_id', $module->id)
+                ->delete();
+
             // Delete thumbnail from Cloudinary if it exists
             if ($module->thumbnail) {
                 $config = new Configuration();
@@ -333,9 +362,24 @@ class ModuleController extends Controller
                 }
             }
 
+            $moduleName = $module->name; // Store module name before deleting the module
             $module->delete();
 
-            return redirect()->route('mentor.modules.index')->with('success', 'Modul berhasil dihapus.');
+            // Dispatch ModuleDeleted notification to santri in the same major
+            $santriInMajor = \App\Models\User::where('role_id', function ($query) {
+                $query->select('id')
+                      ->from('roles')
+                      ->where('name', 'Santri')
+                      ->limit(1);
+            })
+            ->where('major_id', $mentor->major_id)
+            ->get();
+
+            foreach ($santriInMajor as $santri) {
+                $santri->notify(new ModuleDeleted($moduleName));
+            }
+
+            return redirect()->route('mentor.modules.index')->with('success', 'Modul berhasil dihapus dan notifikasi dikirim.');
         } catch (\Exception $e) {
             Log::error('Failed to delete module or Cloudinary assets:', [
                 'module_id' => $id,
