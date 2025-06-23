@@ -335,16 +335,17 @@ class ModuleController extends Controller
                 ->whereJsonContains('data->module_id', $module->id)
                 ->delete();
 
+            // Inisialisasi Cloudinary di sini, agar selalu tersedia
+            $config = new Configuration();
+            $config->cloud->cloudName = env('CLOUDINARY_CLOUD_NAME');
+            $config->cloud->apiKey = env('CLOUDINARY_API_KEY');
+            $config->cloud->apiSecret = env('CLOUDINARY_API_SECRET');
+            $config->url->secure = true;
+
+            $cloudinaryDelete = new Cloudinary($config);
+
             // Delete thumbnail from Cloudinary if it exists
             if ($module->thumbnail) {
-                $config = new Configuration();
-                $config->cloud->cloudName = env('CLOUDINARY_CLOUD_NAME');
-                $config->cloud->apiKey = env('CLOUDINARY_API_KEY');
-                $config->cloud->apiSecret = env('CLOUDINARY_API_SECRET');
-                $config->url->secure = true;
-
-                $cloudinaryDelete = new Cloudinary($config);
-
                 $publicId = $this->extractCloudinaryPublicId($module->thumbnail, 'module_thumbnails');
                 if ($publicId) {
                     $cloudinaryDelete->uploadApi()->destroy($publicId);
