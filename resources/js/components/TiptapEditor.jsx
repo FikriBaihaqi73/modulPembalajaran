@@ -3,7 +3,6 @@ import React, { useCallback } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
-import Image from '@tiptap/extension-image';
 import YouTube from '@tiptap/extension-youtube';
 import Highlight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
@@ -436,6 +435,7 @@ const TiptapEditor = ({ content, onUpdate }) => {
       Link.configure({
         openOnClick: false,
       }),
+      ImageResize,
       YouTube.configure({
         nocookie: false,
         modestbranding: true,
@@ -453,7 +453,6 @@ const TiptapEditor = ({ content, onUpdate }) => {
         placeholder: 'Tuliskan modul di sini...',
       }),
       Markdown,
-      ImageResize,
       TextStyle,
       Color,
     ],
@@ -466,7 +465,7 @@ const TiptapEditor = ({ content, onUpdate }) => {
   return (
     <div className="tiptap-editor-container">
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} className="prose max-w-none" />
     </div>
   );
 };
