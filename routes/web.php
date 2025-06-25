@@ -1,27 +1,36 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
+// Frontend Controllers
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Frontend\ModuleController as FrontendModuleController;
+use App\Http\Controllers\Frontend\SantriProfileController;
+use App\Http\Controllers\Frontend\NotificationController as FrontendNotificationController;
+use App\Http\Controllers\Santri\ModuleDownloadController;
+
+// Admin Controllers
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\SantriController;
 use App\Http\Controllers\Admin\MentorController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\MajorController;
+use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\ModuleController;
+use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
+use App\Http\Controllers\Admin\UserController;
+
+// Mentor Controllers
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\ModuleCategoryController as MentorModuleCategoryController;
 use App\Http\Controllers\Mentor\ModuleController as MentorModuleController;
 use App\Http\Controllers\Mentor\SantriController as MentorSantriController;
 use App\Http\Controllers\Mentor\MentorProfileController;
-use App\Http\Controllers\Frontend\ModuleController as FrontendModuleController;
-use App\Http\Controllers\Frontend\SantriProfileController;
-use App\Http\Controllers\Santri\ModuleDownloadController;
 use App\Http\Controllers\Mentor\ReviewReplyController;
-use App\Http\Controllers\Frontend\NotificationController;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Mentor\NotificationController as MentorNotificationController;
-use App\Http\Controllers\Frontend\NotificationController as FrontendNotificationController;
-use App\Http\Controllers\Admin\UserController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Mentor\AnnouncementController as MentorAnnouncementController;
 
 Route::get('/', function () {
     return view('santri.home');
@@ -53,10 +62,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/profile/update-details', [ProfileController::class, 'updateProfileDetails'])->name('profile.updateDetails');
     Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
-    Route::resource('/santri', SantriController::class)->names('santri');
-    Route::resource('/mentor', MentorController::class)->names('mentor');
-    Route::get('/modules', [\App\Http\Controllers\Admin\ModuleController::class, 'index'])->name('modules.index');
-    Route::get('/modules/{module}', [\App\Http\Controllers\Admin\ModuleController::class, 'show'])->name('modules.show');
+    Route::resource('santri', SantriController::class)->names('santri');
+    Route::resource('mentor', MentorController::class)->names('mentor');
+    Route::get('modules', [ModuleController::class, 'index'])->name('modules.index');
+    Route::get('modules/{module}', [ModuleController::class, 'show'])->name('modules.show');
 
     // Notification Routes
     Route::prefix('notifications')->name('notifications.')->group(function () {
@@ -69,9 +78,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // User Management Routes
     Route::resource('users', UserController::class);
-
-    // Announcement Management Routes
-    Route::resource('announcements', \App\Http\Controllers\Admin\AnnouncementController::class);
+    Route::resource('majors', MajorController::class);
+    Route::resource('announcements', AnnouncementController::class);
 });
 
 // Mentor Routes
@@ -80,14 +88,14 @@ Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(
     Route::get('/profile', [MentorProfileController::class, 'index'])->name('profile');
     Route::post('/profile/update-details', [MentorProfileController::class, 'updateProfileDetails'])->name('profile.updateDetails');
     Route::post('/profile/update-password', [MentorProfileController::class, 'updatePassword'])->name('profile.updatePassword');
-    Route::resource('/module-categories', MentorModuleCategoryController::class)->names('module-categories');
-    Route::resource('/modules', MentorModuleController::class)->names('modules');
-    Route::post('/modules/upload-image', [MentorModuleController::class, 'uploadImage'])->name('modules.uploadImage');
-    Route::post('/modules/{module}/toggle-visibility', [MentorModuleController::class, 'toggleVisibility'])->name('modules.toggleVisibility');
-    Route::resource('/santri', MentorSantriController::class)->names('santri');
-    Route::get('/module-progress', [App\Http\Controllers\Mentor\ModuleProgressController::class, 'index'])->name('module-progress.index');
-    Route::get('/module-progress/{module}', [App\Http\Controllers\Mentor\ModuleProgressController::class, 'show'])->name('module-progress.show');
-    Route::post('/reviews/{review}/replies', [ReviewReplyController::class, 'store'])->name('reviews.replies.store');
+    Route::resource('module-categories', MentorModuleCategoryController::class)->names('module-categories');
+    Route::resource('modules', MentorModuleController::class)->names('modules');
+    Route::post('modules/upload-image', [MentorModuleController::class, 'uploadImage'])->name('modules.uploadImage');
+    Route::post('modules/{module}/toggle-visibility', [MentorModuleController::class, 'toggleVisibility'])->name('modules.toggleVisibility');
+    Route::resource('santri', MentorSantriController::class)->names('santri');
+    Route::get('module-progress', [App\Http\Controllers\Mentor\ModuleProgressController::class, 'index'])->name('module-progress.index');
+    Route::get('module-progress/{module}', [App\Http\Controllers\Mentor\ModuleProgressController::class, 'show'])->name('module-progress.show');
+    Route::post('reviews/{review}/replies', [ReviewReplyController::class, 'store'])->name('reviews.replies.store');
 
     // Notification Routes
     Route::prefix('notifications')->name('notifications.')->group(function () {
@@ -99,7 +107,7 @@ Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(
     });
 
     // Announcement Management Routes
-    Route::resource('announcements', \App\Http\Controllers\Mentor\AnnouncementController::class);
+    Route::resource('announcements', MentorAnnouncementController::class);
 });
 
 // Santri Routes
