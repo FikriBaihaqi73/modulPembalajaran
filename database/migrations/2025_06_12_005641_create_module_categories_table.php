@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->foreignId('major_id')->constrained('majors')->onDelete('cascade');
+            $table->boolean('is_visible')->default(true);
             $table->timestamps();
         });
     }

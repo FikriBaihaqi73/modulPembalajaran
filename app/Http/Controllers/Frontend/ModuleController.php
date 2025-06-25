@@ -18,15 +18,17 @@ class ModuleController extends Controller
     {
         $isAdmin = false;
         $majors = collect();
-        $query = Module::with(['major', 'moduleCategory'])->where('is_visible', true);
-        $moduleCategoriesQuery = ModuleCategory::query(); // Inisialisasi query untuk kategori
+        $query = Module::visibleForSantri(); // Use the new scope
+        $moduleCategoriesQuery = ModuleCategory::where('is_visible', true); // Categories still filtered by their own visibility
 
         if (Auth::check()) {
             $user = Auth::user();
             if ($user->role->name === 'Admin') {
                 $isAdmin = true;
                 $majors = Major::all();
-                // Admin bisa melihat semua modul dan kategori secara default
+                // Admin bisa melihat semua modul dan kategori secara default, tanpa filter is_visible atau scope santri
+                $query = Module::with(['major', 'moduleCategory']);
+                $moduleCategoriesQuery = ModuleCategory::query();
             } else {
                 // Non-admin (Santri), filter modul berdasarkan major_id user yang login
                 $query->where('major_id', $user->major_id);
@@ -34,6 +36,8 @@ class ModuleController extends Controller
                 $moduleCategoriesQuery->where('major_id', $user->major_id);
             }
         } else {
+            // Jika tidak login, hanya tampilkan modul yang visibleForSantri
+            // Module::visibleForSantri() already applied above
             return view('santri.modules.guest_index');
         }
 
@@ -50,7 +54,7 @@ class ModuleController extends Controller
         if ($request->has('module_category_id') && $request->input('module_category_id') != '') {
             $categoryId = $request->input('module_category_id');
             $query->whereHas('moduleCategory', function ($q) use ($categoryId) {
-                $q->where('module_categories.id', $categoryId);
+                $q->where('module_categories.id', $categoryId); // No need to check is_visible here, as the parent query already ensures this via scope/initial filter
             });
         }
 
@@ -73,19 +77,22 @@ class ModuleController extends Controller
      */
     public function show(string $id)
     {
-        // Ensure the module is visible, exists, and belongs to the user's major
-        $module = Module::with(['major', 'moduleCategory', 'reviews.user', 'reviews.replies.user'])
-                        ->where('is_visible', true);
+        $moduleQuery = Module::with(['major', 'moduleCategory', 'reviews.user', 'reviews.replies.user']);
 
         if (Auth::check()) {
             $user = Auth::user();
-            // Santri hanya boleh melihat modul dari jurusannya
             if ($user->role->name === 'Santri') {
-                $module->where('major_id', $user->major_id);
+                $moduleQuery->where('major_id', $user->major_id)->visibleForSantri(); // Apply scope for Santri
+            } else if ($user->role->name === 'Admin') {
+                // Admin dapat melihat semua modul tanpa filter major_id atau is_visible
+                // No additional filters needed for Admin
             }
+        } else {
+            // Jika tidak login, hanya tampilkan modul yang visibleForSantri
+            $moduleQuery->visibleForSantri();
         }
 
-        $module = $module->findOrFail($id);
+        $module = $moduleQuery->findOrFail($id);
 
         $userReview = null;
         if (Auth::check()) {
@@ -106,14 +113,14 @@ class ModuleController extends Controller
 
         $user = Auth::user();
 
-        $query = Module::with(['major', 'moduleCategory', 'progress'])
+        $query = Module::visibleForSantri() // Use the new scope
                         ->where('major_id', $user->major_id)
                         ->whereHas('progress', function ($q) use ($user) {
                             $q->where('user_id', $user->id)
                               ->where('is_completed', true);
                         });
 
-        $moduleCategoriesQuery = ModuleCategory::where('major_id', $user->major_id); // Categories relevant to the santri's major
+        $moduleCategoriesQuery = ModuleCategory::where('major_id', $user->major_id)->where('is_visible', true); // Categories relevant to the santri's major and visible
 
         // Apply search filter
         if ($request->has('search') && $request->input('search') != '') {
@@ -138,15 +145,14 @@ class ModuleController extends Controller
         $isAdmin = false; // For the view compatibility, as this is santri specific
         $majors = collect(); // For the view compatibility, as this is santri specific
 
-        // Get total modules for the user's major
-        $totalModules = Module::where('major_id', $user->major_id)->where('is_visible', true)->count();
+        // Get total modules for the user's major (only visible ones)
+        $totalModules = Module::visibleForSantri()->where('major_id', $user->major_id)->count();
 
         // Get completed modules count (already fetched by $modules query)
         $completedModulesCount = $query->count();
 
-        // Get uncompleted modules count
-        $uncompletedModulesCount = Module::where('major_id', $user->major_id)
-            ->where('is_visible', true)
+        // Get uncompleted modules count (only visible ones)
+        $uncompletedModulesCount = Module::visibleForSantri()->where('major_id', $user->major_id)
             ->whereDoesntHave('progress', function ($q) use ($user) {
                 $q->where('user_id', $user->id)
                     ->where('is_completed', true);

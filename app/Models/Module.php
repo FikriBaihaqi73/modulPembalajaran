@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -113,5 +113,19 @@ class Module extends Model
     public function getIsCompletedByCurrentUserAttribute(): bool
     {
         return (bool) $this->currentUserProgress?->is_completed;
+    }
+
+    /**
+     * Scope a query to only include modules visible to santri.
+     */
+    public function scopeVisibleForSantri($query)
+    {
+        $query->where('is_visible', true)
+              ->where(function ($subQuery) {
+                  $subQuery->doesntHave('moduleCategory')
+                           ->orWhereHas('moduleCategory', function ($categoryQuery) {
+                               $categoryQuery->where('is_visible', true);
+                           });
+              });
     }
 }

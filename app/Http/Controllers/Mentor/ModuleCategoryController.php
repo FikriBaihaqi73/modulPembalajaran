@@ -23,6 +23,11 @@ class ModuleCategoryController extends Controller
             $query->where('name', 'like', '%' . $search . '%');
         }
 
+        // Optionally filter by visibility status
+        if ($request->has('is_visible') && in_array($request->input('is_visible'), ['0', '1'])) {
+            $query->where('is_visible', (bool)$request->input('is_visible'));
+        }
+
         $moduleCategories = $query->latest()->paginate(10);
         return view('mentor.module_categories.index', compact('moduleCategories'));
     }
@@ -116,5 +121,19 @@ class ModuleCategoryController extends Controller
         $moduleCategory->delete();
 
         return redirect()->route('mentor.module-categories.index')->with('success', 'Kategori modul berhasil dihapus.');
+    }
+
+    /**
+     * Toggle the visibility of the specified module category.
+     */
+    public function toggleVisibility(string $id)
+    {
+        $mentor = Auth::user();
+        $moduleCategory = ModuleCategory::where('major_id', $mentor->major_id)->findOrFail($id);
+
+        $moduleCategory->is_visible = !$moduleCategory->is_visible;
+        $moduleCategory->save();
+
+        return redirect()->route('mentor.module-categories.index')->with('success', 'Status visibilitas kategori modul berhasil diperbarui.');
     }
 }

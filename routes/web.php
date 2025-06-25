@@ -89,6 +89,7 @@ Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(
     Route::post('/profile/update-details', [MentorProfileController::class, 'updateProfileDetails'])->name('profile.updateDetails');
     Route::post('/profile/update-password', [MentorProfileController::class, 'updatePassword'])->name('profile.updatePassword');
     Route::resource('module-categories', MentorModuleCategoryController::class)->names('module-categories');
+    Route::post('module-categories/{module_category}/toggle-visibility', [MentorModuleCategoryController::class, 'toggleVisibility'])->name('module-categories.toggleVisibility');
     Route::resource('modules', MentorModuleController::class)->names('modules');
     Route::post('modules/upload-image', [MentorModuleController::class, 'uploadImage'])->name('modules.uploadImage');
     Route::post('modules/{module}/toggle-visibility', [MentorModuleController::class, 'toggleVisibility'])->name('modules.toggleVisibility');
