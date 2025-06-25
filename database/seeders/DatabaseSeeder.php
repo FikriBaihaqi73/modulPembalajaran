@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(ModuleSeeder::class);
+        $this->call(ModuleReviewProgressSeeder::class);
 
         // User::factory()->create([
         //     'name' => 'Test User',
