@@ -452,7 +452,9 @@ const TiptapEditor = ({ content, onUpdate }) => {
       Placeholder.configure({
         placeholder: 'Tuliskan modul di sini...',
       }),
-      Markdown,
+      Markdown.configure({
+        transformPastedText: true,
+      }),
       TextStyle,
       Color,
     ],

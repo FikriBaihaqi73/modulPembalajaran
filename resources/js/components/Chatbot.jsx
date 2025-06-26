@@ -11,27 +11,32 @@ const Chatbot = () => {
 
     const chatbotResponses = {
         'main': {
-            message: `Halo! Selamat datang di layanan bantuan. Silakan pilih opsi di bawah ini dengan mengetikkan angka:
-1. Pendaftaran
-2. Login Aplikasi
-3. Tutorial Aplikasi
-4. Lihat dan Unduh Modul
-5. Ganti Password
+            message: `Halo! 👋 Selamat datang di Bantuan Aplikasi Pembelajaran Santri Pondok IT. Silakan pilih menu:
+1. Tutorial Aplikasi
+2. Cara Daftar Akun
+3. Cara Login
+4. Cara Melihat & Mengunduh Modul
+5. Cara Ganti Password
 9. Kembali ke menu utama`,
             options: {
-                '1': 'registration',
-                '2': 'login',
-                '3': 'tutorial',
+                '1': 'tutorial',
+                '2': 'registration',
+                '3': 'login',
                 '4': 'module_and_download',
                 '5': 'password_reset',
+                '9': 'main'
             }
         },
         'registration': {
-            message: `Untuk melakukan pendaftaran, silakan hubungi admin Pondok IT atau Mentor jurusan Anda. Tekan 9 untuk kembali ke menu utama.`,
+            message: `Pendaftaran akun hanya bisa dilakukan melalui admin Pondok IT atau Mentor jurusan Anda. Silakan hubungi mereka untuk dibuatkan akun. Setelah itu, Anda akan mendapatkan username dan password untuk login. Tekan 9 untuk kembali ke menu utama.`,
             options: { '9': 'main' }
         },
         'login': {
-            message: `Untuk masuk ke aplikasi, silakan kunjungi halaman login di URL '/login'. Masukkan username dan password Anda yang diberikan oleh admin Pondok IT atau Mentor jurusan Anda. Jika lupa password, silakan hubungi admin Pondok IT atau Mentor jurusan Anda. Tekan 9 untuk kembali ke menu utama.`,
+            message: `Untuk login:
+1. Klik tombol "Login" di pojok kanan atas halaman utama.
+2. Masukkan username dan password yang diberikan oleh admin/mentor.
+3. Jika lupa password, hubungi admin/mentor untuk reset password.
+Tekan 9 untuk kembali ke menu utama.`,
             options: { '9': 'main' }
         },
         'tutorial': {
