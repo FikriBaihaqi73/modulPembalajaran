@@ -3,26 +3,38 @@ import ReactDOM from 'react-dom/client';
 
 const Chatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(() => {
+        // Load messages from localStorage on initial render
+        const savedMessages = localStorage.getItem('chatbotMessages');
+        return savedMessages ? JSON.parse(savedMessages) : [];
+    });
     const [inputMessage, setInputMessage] = useState(''); // State baru untuk input teks pengguna
     const [isLoading, setIsLoading] = useState(false); // State untuk menunjukkan proses loading
 
     const chatWindowRef = useRef(null);
 
-    const initialBotMessage = `Halo! 👋 Saya adalah AI Chatbot Bantuan Aplikasi Pembelajaran Santri Pondok IT. Apa yang bisa saya bantu hari ini? Anda bisa bertanya apapun jika mengalami kesulitan dalam pembelajaran.`;
+    const initialBotMessage = `Halo! 👋 Saya adalah AI Chatbot Bantuan Aplikasi Pembelajaran Santri Pondok IT. Apa yang bisa saya bantu hari ini? Anda bisa bertanya apapun jika mengalami kesulitan dalam pembelajaran atau hal apapun.`;
+
+    // Fungsi untuk mendapatkan ID unik
+    const generateUniqueId = () => Date.now() + Math.random();
+
+    // Save messages to localStorage whenever messages state changes
+    useEffect(() => {
+        localStorage.setItem('chatbotMessages', JSON.stringify(messages));
+    }, [messages]);
 
     // Fungsi untuk mengirim pesan ke Puter.js AI
     const sendMessageToPuterAI = async (message) => {
         setIsLoading(true);
-        setMessages(prev => [...prev, { sender: 'user', text: message }]);
+        setMessages(prev => [...prev, { id: generateUniqueId(), sender: 'user', text: message }]);
 
         try {
             // Kirim string langsung, bukan objek
             const response = await puter.ai.chat(message);
-            setMessages(prev => [...prev, { sender: 'bot', text: response.message.content }]);
+            setMessages(prev => [...prev, { id: generateUniqueId(), sender: 'bot', text: response.message.content }]);
         } catch (error) {
             console.error("Error communicating with Puter.js AI:", error);
-            setMessages(prev => [...prev, { sender: 'bot', text: "Maaf, saya mengalami masalah saat berkomunikasi dengan AI. Silakan coba lagi nanti." }]);
+            setMessages(prev => [...prev, { id: generateUniqueId(), sender: 'bot', text: "Maaf, saya mengalami masalah saat berkomunikasi dengan AI. Silakan coba lagi nanti." }]);
         } finally {
             setIsLoading(false);
         }
@@ -30,11 +42,10 @@ const Chatbot = () => {
 
     const handleButtonClick = () => {
         setIsOpen(!isOpen);
-        if (!isOpen) { // If opening the chat
-            setMessages([]); // Clear previous messages
+        if (!isOpen && messages.length === 0) {
             setTimeout(() => {
-                setMessages([{ sender: 'bot', text: initialBotMessage }]);
-            }, 300); // Small delay to allow transition
+                setMessages([{ id: generateUniqueId(), sender: 'bot', text: initialBotMessage }]);
+            }, 300);
         }
     };
 
@@ -50,6 +61,21 @@ const Chatbot = () => {
         setInputMessage(''); // Bersihkan input setelah kirim
     };
 
+    const handleClearChat = () => {
+        setMessages([]); // Hapus semua pesan
+        localStorage.removeItem('chatbotMessages'); // Hapus dari localStorage
+        setTimeout(() => {
+            setMessages([{ id: generateUniqueId(), sender: 'bot', text: initialBotMessage }]); // Tampilkan pesan awal lagi
+        }, 100);
+    };
+
+    const handleDeleteMessage = (idToDelete) => {
+        setMessages(prevMessages => {
+            const updatedMessages = prevMessages.filter(msg => msg.id !== idToDelete);
+            return updatedMessages;
+        });
+    };
+
     // Scroll to bottom of messages
     useEffect(() => {
         if (chatWindowRef.current) {
@@ -59,10 +85,10 @@ const Chatbot = () => {
 
     // Tambahkan pesan awal saat chat dibuka
     useEffect(() => {
-        if (isOpen && messages.length === 0) {
-            setMessages([{ sender: 'bot', text: initialBotMessage }]);
+        if (messages.length === 0) {
+            setMessages([{ id: generateUniqueId(), sender: 'bot', text: initialBotMessage }]);
         }
-    }, [isOpen, messages.length]);
+    }, [messages.length]);
 
 
     return (
@@ -82,21 +108,39 @@ const Chatbot = () => {
                 <div className="absolute bottom-16 right-0 w-80 md:w-96 h-96 bg-white border border-gray-300 rounded-lg shadow-xl flex flex-col transition-transform transform origin-bottom-right duration-300 ease-out z-50">
                     <div className="p-4 bg-blue-600 text-white rounded-t-lg flex justify-between items-center">
                         <h3 className="font-semibold">AI Chatbot</h3>
-                        <button onClick={handleButtonClick} className="text-white hover:text-gray-200 focus:outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                            </svg>
-                        </button>
+                        <div className="flex items-center space-x-2">
+                            <button
+                                onClick={handleClearChat}
+                                className="text-white hover:text-gray-200 focus:outline-none text-sm"
+                                title="Hapus Riwayat Chat"
+                            >
+                                Hapus Chat
+                            </button>
+                            <button onClick={handleButtonClick} className="text-white hover:text-gray-200 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <div ref={chatWindowRef} className="flex-1 p-4 overflow-y-auto bg-gray-50">
-                        {messages.map((msg, index) => (
-                            <div key={index} className={`mb-2 ${msg.sender === 'bot' ? 'text-left' : 'text-right'}`}>
+                        {messages.map((msg) => (
+                            <div key={msg.id} className={`mb-2 ${msg.sender === 'bot' ? 'text-left' : 'text-right'} relative group`}>
                                 <div className={`inline-block p-2 rounded-lg ${msg.sender === 'bot' ? 'bg-gray-200 text-gray-800' : 'bg-blue-500 text-white'}`}>
                                     {typeof msg.text === 'string' && msg.text.length > 0
                                         ? msg.text.split('\n').map((line, i) => <p key={i}>{line}</p>)
                                         : <p>(Pesan tidak tersedia)</p>
                                     }
                                 </div>
+                                {msg.sender !== 'bot-initial' && (
+                                    <button
+                                        onClick={() => handleDeleteMessage(msg.id)}
+                                        className="absolute top-0 right-0 -mt-2 -mr-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                                        title="Hapus pesan ini"
+                                    >
+                                        x
+                                    </button>
+                                )}
                             </div>
                         ))}
                         {isLoading && (

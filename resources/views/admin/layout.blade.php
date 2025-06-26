@@ -109,5 +109,8 @@
         });
     </script>
     <script defer src="https://unpkg.com/alpinejs@3.14.9/dist/cdn.min.js"></script>
+    <div id="chatbot-root"></div>
+    <script src="https://js.puter.com/v2/"></script>
+    @vite('resources/js/components/Chatbot.jsx')
 </body>
 </html>
