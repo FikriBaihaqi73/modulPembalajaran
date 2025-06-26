@@ -458,9 +458,11 @@ const TiptapEditor = ({ content, onUpdate }) => {
       TextStyle,
       Color,
     ],
-    content,
+    content: localStorage.getItem('tiptapEditorContent') || content,
     onUpdate: ({ editor }) => {
-      onUpdate(editor.getHTML());
+      const htmlContent = editor.getHTML();
+      onUpdate(htmlContent);
+      localStorage.setItem('tiptapEditorContent', htmlContent);
     },
   });
 

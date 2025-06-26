@@ -169,30 +169,163 @@ document.addEventListener('DOMContentLoaded', function () {
         setupDynamicCategories('module-categories-container-edit', optionsHtmlForNewSelects);
     }
 
+    // --- Logic for saving/loading module form data to/from localStorage ---
+
+    // Get current module ID if on edit page
+    const moduleIdElement = document.querySelector('input[name="module_id"]'); // Assuming module_id hidden input exists
+    const currentModuleId = moduleIdElement ? moduleIdElement.value : null;
+    console.log('Current Module ID:', currentModuleId);
+
+    // Determine localStorage key based on page (create or edit specific module)
+    const unsavedDataKey = currentModuleId ? `unsavedModuleData_${currentModuleId}` : 'unsavedModuleData_create';
+    console.log('LocalStorage Key:', unsavedDataKey);
+
+    const moduleNameInput = document.getElementById('name');
+    const hiddenContentInput = document.getElementById('content-hidden'); // Tiptap content
+    const moduleForm = document.getElementById('moduleForm');
+
+    // Function to save form data to localStorage
+    function saveModuleFormData() {
+        if (!moduleNameInput || !moduleForm) {
+            console.log('saveModuleFormData: Module form elements not found.');
+            return; // Ensure elements exist on the page
+        }
+
+        const currentData = JSON.parse(localStorage.getItem(unsavedDataKey)) || {};
+        currentData.name = moduleNameInput.value;
+
+        // Collect category IDs
+        const categoriesContainer = currentModuleId ? moduleCategoriesContainerEdit : moduleCategoriesContainer;
+        if (categoriesContainer) {
+            const selectedCategories = Array.from(categoriesContainer.querySelectorAll('select[name="module_category_ids[]"]'))
+                .map(select => select.value)
+                .filter(value => value !== ''); // Only save selected non-empty categories
+            currentData.categories = selectedCategories;
+        }
+
+        localStorage.setItem(unsavedDataKey, JSON.stringify(currentData));
+        console.log('Saved unsavedModuleData:', currentData);
+    }
+
+    // Function to load form data from localStorage
+    function loadModuleFormData() {
+        if (!moduleNameInput || !moduleForm) {
+            console.log('loadModuleFormData: Module form elements not found.');
+            return; // Ensure elements exist on the page
+        }
+
+        const savedData = JSON.parse(localStorage.getItem(unsavedDataKey));
+        console.log('Loaded savedData:', savedData);
+
+        if (savedData) {
+            if (savedData.name !== undefined) {
+                moduleNameInput.value = savedData.name;
+                console.log('Loaded module name:', savedData.name);
+            }
+
+            // Load categories
+            const categoriesContainer = currentModuleId ? moduleCategoriesContainerEdit : moduleCategoriesContainer;
+            if (categoriesContainer && savedData.categories && savedData.categories.length > 0) {
+                console.log('Loading categories:', savedData.categories);
+                // Clear existing selects (if any, typically for create page's initial empty select)
+                if (!currentModuleId && categoriesContainer.querySelector('.module-category-item') && categoriesContainer.querySelectorAll('.module-category-item').length === 1 && categoriesContainer.querySelector('select').value === '') {
+                    categoriesContainer.innerHTML = '';
+                } else if (currentModuleId) {
+                    // For edit page, we need to clear and re-add to overwrite Blade's initial render
+                    categoriesContainer.innerHTML = '';
+                }
+
+                const categoryOptionsHtml = categoriesContainer.dataset.options || ''; // Get options for new selects
+
+                savedData.categories.forEach((categoryId, index) => {
+                    const newCategoryItem = document.createElement('div');
+                    newCategoryItem.className = 'flex items-center mb-2 module-category-item';
+                    // Construct innerHTML to include select and appropriate button
+                    newCategoryItem.innerHTML = `
+                        <select name="module_category_ids[]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <option value="">Pilih Kategori Modul</option>
+                            ${categoryOptionsHtml ? categoryOptionsHtml : categoriesContainer.dataset.options}
+                        </select>
+                        ${index === 0 ? '<button type="button" class="ml-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded add-category-btn">+</button>' : '<button type="button" class="ml-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded remove-category-btn">-</button>'}
+                    `;
+                    categoriesContainer.appendChild(newCategoryItem);
+
+                    const selectElement = newCategoryItem.querySelector('select[name="module_category_ids[]"]');
+                    if (selectElement) {
+                        selectElement.value = categoryId;
+                    }
+                });
+                updateRemoveButtons(categoriesContainer); // Re-run to ensure button visibility is correct
+            }
+        }
+    }
+
+    // Only apply localStorage logic if we are on module create/edit forms
+    if (moduleForm) {
+        console.log('Module form detected. Applying localStorage logic.');
+        // Load data on page load
+        loadModuleFormData();
+
+        // Save data on input change
+        moduleNameInput.addEventListener('input', saveModuleFormData);
+
+        // Delegated event listeners for category changes and add/remove buttons
+        const categoriesContainers = [moduleCategoriesContainer, moduleCategoriesContainerEdit].filter(Boolean);
+        categoriesContainers.forEach(container => {
+            if (container) {
+                container.addEventListener('change', (event) => {
+                    if (event.target.matches('select[name="module_category_ids[]"]')) {
+                        console.log('Category select change detected.');
+                        saveModuleFormData();
+                    }
+                });
+                container.addEventListener('click', (event) => {
+                    if (event.target.matches('.add-category-btn') || event.target.matches('.remove-category-btn')) {
+                        console.log('Add/Remove category button clicked.');
+                        setTimeout(saveModuleFormData, 50); // Small delay for DOM update
+                    }
+                });
+                // Also observe mutations for dynamic category additions/removals directly
+                const observer = new MutationObserver(saveModuleFormData);
+                observer.observe(container, { childList: true, subtree: true });
+            }
+        });
+
+        // Clear unsaved data on form submission (successful save)
+        moduleForm.addEventListener('submit', () => {
+            console.log('Form submission detected. Clearing localStorage for unsavedModuleData.');
+            localStorage.removeItem(unsavedDataKey);
+            localStorage.removeItem('tiptapEditorContent');
+            localStorage.removeItem('lastActiveModulePage');
+        });
+
+        // Handle initial rendering of categories for the edit page if there's no saved data
+        // This prevents the page from clearing pre-filled categories from Blade on first load
+        if (currentModuleId && !localStorage.getItem(unsavedDataKey) && moduleCategoriesContainerEdit) {
+            // If no unsaved data, but on edit page, ensure dynamic category JS is set up
+            // and updateRemoveButtons is called to fix button visibility.
+            updateRemoveButtons(moduleCategoriesContainerEdit);
+        }
+
+    }
+
     // Tiptap Editor Initialization
     const editorRoot = document.getElementById('tiptap-editor');
     const hiddenInput = document.getElementById('content-hidden');
-    const moduleForm = document.getElementById('moduleForm');
-
-    if (moduleForm) {
-        moduleForm.addEventListener('submit', function (event) {
-            // Only prevent default if the actual submit button was not clicked
-            // This prevents auto-submit when Tiptap's image upload input is triggered
-            if (document.activeElement !== this.querySelector('button[type="submit"]')) {
-                event.preventDefault();
-            }
-        });
-    }
 
     if (editorRoot && hiddenInput) {
         import('./components/TiptapEditor').then(({ default: TiptapEditor }) => {
-            const initialContent = hiddenInput.value;
+            // Content for TiptapEditor is already handled within TiptapEditor.jsx
+            // which loads from 'tiptapEditorContent' localStorage key.
+            // We just need to ensure the onUpdate callback correctly updates the hidden input.
+
             ReactDOM.createRoot(editorRoot).render(
                 <React.StrictMode>
                     <TiptapEditor
-                        content={initialContent}
+                        content={hiddenInput.value} // Initial content from server, TiptapEditor itself loads from local storage
                         onUpdate={(html) => {
                             hiddenInput.value = html;
+                            // No need to save to localStorage here, TiptapEditor component handles it.
                         }}
                     />
                 </React.StrictMode>
