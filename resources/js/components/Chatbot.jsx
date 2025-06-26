@@ -9,7 +9,7 @@ const Chatbot = () => {
 
     const chatWindowRef = useRef(null);
 
-    const initialBotMessage = `Halo! 👋 Saya adalah AI Chatbot Bantuan Aplikasi Pembelajaran Santri Pondok IT. Apa yang bisa saya bantu hari ini? Anda bisa bertanya apapun tentang aplikasi ini.`;
+    const initialBotMessage = `Halo! 👋 Saya adalah AI Chatbot Bantuan Aplikasi Pembelajaran Santri Pondok IT. Apa yang bisa saya bantu hari ini? Anda bisa bertanya apapun jika mengalami kesulitan dalam pembelajaran.`;
 
     // Fungsi untuk mengirim pesan ke Puter.js AI
     const sendMessageToPuterAI = async (message) => {
