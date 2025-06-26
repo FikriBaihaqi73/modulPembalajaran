@@ -38,13 +38,13 @@ class UserSeeder extends Seeder
         ]);
 
         for ($i = 1; $i <= 10; $i++) {
-            User::factory()->create([
+        User::factory()->create([
                 'name' => 'Santri ' . $major->name . ' ' . $i,
                 'username' => strtolower(str_replace(' ', '', 'santri' . $major->name . $i)),
-                'password' => Hash::make('password'),
-                'role_id' => $santriRole->id,
+            'password' => Hash::make('password'),
+            'role_id' => $santriRole->id,
                 'major_id' => $major->id,
-            ]);
+        ]);
         }
         }
     }
