@@ -62,7 +62,7 @@ class ModuleDownloadController extends Controller
                 $imageData = @file_get_contents($src); // Use @ to suppress warnings, handle error explicitly
 
                 if ($imageData !== false) {
-                    $type = pathinfo($src, PATHINFO_EXTENSION);
+                    $type = pathinfo(parse_url($src, PHP_URL_PATH), PATHINFO_EXTENSION);
                     if (empty($type)) {
                         // Try to guess type from content-type header if available
                         $headers = get_headers($src, 1);
@@ -79,29 +79,29 @@ class ModuleDownloadController extends Controller
                     if ($type) {
                         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($imageData);
                         $img->setAttribute('src', $base64);
-                        Log::info('External image converted to Base64 successfully.');
+                        Log::info('External content image converted to Base64. (Type: ' . $type . ', Size: ' . strlen($imageData) . ' bytes, Base64 start: ' . substr($base64, 0, 50) . '...)');
                     } else {
-                        Log::warning('Could not determine image type for: ' . $src);
+                        Log::warning('Could not determine type for external content image: ' . $src);
                     }
                 } else {
-                    Log::error('Failed to fetch external image: ' . $src);
+                    Log::error('Failed to fetch external content image: ' . $src . ' (file_get_contents returned false)');
                 }
             } else if (Str::startsWith($src, '/storage/')) { // Keep handling for local storage images if any
                 $imagePath = public_path($src);
-                Log::info('Resolved local image path: ' . $imagePath);
+                Log::info('Resolved local content image path: ' . $imagePath);
 
                 if (file_exists($imagePath)) {
                     $type = pathinfo($imagePath, PATHINFO_EXTENSION);
                     $data = file_get_contents($imagePath);
                     if ($data === false) {
-                        Log::error('Failed to get contents of local image file: ' . $imagePath);
+                        Log::error('Failed to get contents of local content image file: ' . $imagePath);
                         continue;
                     }
                     $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                     $img->setAttribute('src', $base64);
-                    Log::info('Local image converted to Base64 successfully.');
+                    Log::info('Local content image converted to Base64. (Type: ' . $type . ', Size: ' . strlen($data) . ' bytes, Base64 start: ' . substr($base64, 0, 50) . '...)');
                 } else {
-                    Log::warning('Local image file not found for embedding in PDF: ' . $imagePath);
+                    Log::warning('Local content image file not found for embedding in PDF: ' . $imagePath);
                 }
             } else {
                 Log::info('Skipping unsupported image src format: ' . $src);
@@ -130,10 +130,11 @@ class ModuleDownloadController extends Controller
         $thumbnailBase64 = null;
         if ($module->thumbnail) {
             // Directly fetch thumbnail from its URL (Cloudinary)
-            $thumbnailData = @file_get_contents($module->thumbnail); // Use @ to suppress warnings
+            Log::info('Attempting to fetch thumbnail: ' . $module->thumbnail);
+            $thumbnailData = @file_get_contents($module->thumbnail); // Use @to suppress warnings
 
             if ($thumbnailData !== false) {
-                $type = pathinfo($module->thumbnail, PATHINFO_EXTENSION);
+                $type = pathinfo(parse_url($module->thumbnail, PHP_URL_PATH), PATHINFO_EXTENSION);
                 if (empty($type)) {
                     // Try to guess type from content-type header if available
                     $headers = get_headers($module->thumbnail, 1);
@@ -148,12 +149,12 @@ class ModuleDownloadController extends Controller
                 }
                 if ($type) {
                     $thumbnailBase64 = 'data:image/' . $type . ';base64,' . base64_encode($thumbnailData);
-                    Log::info('Thumbnail Base64 generated for: ' . $module->thumbnail);
+                    Log::info('Thumbnail Base64 generated for: ' . $module->thumbnail . ' (Type: ' . $type . ', Size: ' . strlen($thumbnailData) . ' bytes)');
                 } else {
                     Log::warning('Could not determine thumbnail type for: ' . $module->thumbnail);
                 }
             } else {
-                Log::error('Failed to fetch thumbnail from URL: ' . $module->thumbnail);
+                Log::error('Failed to fetch thumbnail from URL: ' . $module->thumbnail . ' (file_get_contents returned false)');
             }
         }
 
@@ -213,7 +214,7 @@ class ModuleDownloadController extends Controller
                     $thumbnailData = @file_get_contents($module->thumbnail);
 
                     if ($thumbnailData !== false) {
-                        $type = pathinfo($module->thumbnail, PATHINFO_EXTENSION);
+                        $type = pathinfo(parse_url($module->thumbnail, PHP_URL_PATH), PATHINFO_EXTENSION);
                         if (empty($type)) {
                             $headers = get_headers($module->thumbnail, 1);
                             if (isset($headers['Content-Type'])) {
