@@ -94,6 +94,17 @@ class ModuleController extends Controller
 
         $module = $moduleQuery->findOrFail($id);
 
+        // Record module progress for authenticated santri
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->role->name === 'Santri') {
+                ModuleProgress::firstOrCreate(
+                    ['user_id' => $user->id, 'module_id' => $module->id],
+                    ['is_completed' => false] // Set to false when module is first opened
+                );
+            }
+        }
+
         $userReview = null;
         if (Auth::check()) {
             $userReview = $module->reviews->where('user_id', Auth::id())->first();
